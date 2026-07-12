@@ -237,6 +237,9 @@ complete, even if related setup work has begun.
       for Proposition 1 and Proposition 45. Current status is monitor-only:
       qualified-measure listings and measure text exist, but full voter-guide
       packages are not ready for ingestion.
+- [x] **8.1, source monitor** Added `make check-november-sources` to re-check
+      the official SOS voter-guide and qualified-measures pages without
+      snapshotting, ingesting, embedding, or storing November sources.
 
 ## Phase 0 — Product decisions and governance
 
@@ -835,6 +838,7 @@ reconsideration.
 3. [x] Narrow the first target set to one or two measures.
 4. [x] Run first source-readiness check for Proposition 1 and Proposition 45.
 5. [ ] Wait until official November ballot and voter-guide materials are available.
+   Use `make check-november-sources` to re-check the official SOS pages.
 6. [ ] Build a contest coverage matrix for the exact public geography.
 7. [ ] Repeat Phase 2 source ingestion and review for every contest intended for
    display.

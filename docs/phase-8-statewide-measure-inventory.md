@@ -78,5 +78,12 @@ The first readiness check was completed on 2026-07-12:
 `docs/phase-8-source-readiness-2026-07-12.md`
 
 Result: monitor only. Proposition 1 and Proposition 45 are not ready for
-release-candidate ingestion because full official voter-guide materials have
-not yet been located.
+release-candidate ingestion because the full official voter-guide materials have
+not yet been published. The SOS voter-guide page exists and says the November 3,
+2026 guide will be available in September 2026.
+
+Rerun:
+
+```bash
+make check-november-sources
+```

@@ -187,6 +187,14 @@ release.
    snapshotting or ingestion.
 
 Current readiness result as of 2026-07-12: monitor only. Qualified-measure
-listings and underlying measure text are available, but voter-guide materials,
-arguments, rebuttals, analyses, and stable voter-guide locators are not ready
-for release-candidate ingestion.
+listings and underlying measure text are available. The official voter-guide
+page exists at `https://voterguide.sos.ca.gov/`, but says the November 3, 2026
+guide will be available in September 2026. Arguments, rebuttals, analyses, and
+stable voter-guide locators are therefore not ready for release-candidate
+ingestion.
+
+To re-check:
+
+```bash
+make check-november-sources
+```

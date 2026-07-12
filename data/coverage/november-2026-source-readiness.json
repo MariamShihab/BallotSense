@@ -14,6 +14,12 @@
       "title": "Qualified Statewide Ballot Measures",
       "url": "https://www.sos.ca.gov/elections/ballot-measures/qualified-ballot-measures",
       "finding": "Qualified statewide measure list is available and includes Proposition 1 and Proposition 45."
+    },
+    {
+      "publisher": "California Secretary of State",
+      "title": "Official Voter Information Guide",
+      "url": "https://voterguide.sos.ca.gov/",
+      "finding": "The November 3, 2026 guide page exists, but says the guide will be available in September 2026."
     }
   ],
   "targets": [
@@ -36,7 +42,7 @@
         }
       ],
       "missing_for_release_candidate": [
-        "official voter guide page or PDF",
+        "published official voter guide page or PDF",
         "official title and summary suitable for voter-facing citation",
         "official fiscal or legislative analysis",
         "official argument in favor",
@@ -65,7 +71,7 @@
         }
       ],
       "missing_for_release_candidate": [
-        "official voter guide page or PDF",
+        "published official voter guide page or PDF",
         "official title and summary suitable for voter-facing citation",
         "official fiscal or legislative analysis",
         "official argument in favor",
@@ -76,5 +82,5 @@
       "decision": "monitor"
     }
   ],
-  "next_check": "Check official SOS voter guide and qualified-measures pages again before snapshotting any release-candidate source."
+  "next_check": "Rerun make check-november-sources after the SOS voter guide is published in or around September 2026."
 }
