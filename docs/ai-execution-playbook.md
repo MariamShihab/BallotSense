@@ -176,6 +176,14 @@ complete, even if related setup work has begun.
       citation-detail, and local-note screens. Project owner verified the
       mobile flow and source-proof opening on 2026-07-12; local notes remain
       outside API requests.
+- [x] **6.1, staging deployment** Project owner authorized a non-public
+      staging deployment on 2026-07-12. Created separate private API and web
+      Cloud Run services, least-privilege staging service accounts, Artifact
+      Registry images, Secret Manager staging configuration, Cloud Logging /
+      Error Reporting services, a $10 project budget alert, and conservative
+      Cloud Run scale limits. Verified the private frontend-to-private-API
+      cited brief path through an authenticated local proxy and exercised
+      Cloud Run rollback once before restoring the corrected web revision.
 
 ## Phase 0 — Product decisions and governance
 
@@ -647,10 +655,10 @@ suite passes.
 
 ### Phase 5 acceptance checklist
 
-- [ ] A voter can reach a cited brief in three clear steps.
-- [ ] Every displayed claim exposes its proof.
-- [ ] Source types and uncertainty are unmistakable.
-- [ ] The guide is usable on a mobile device without an account.
+- [x] A voter can reach a cited brief in three clear steps.
+- [x] Every displayed claim exposes its proof.
+- [x] Source types and uncertainty are unmistakable.
+- [x] The guide is usable on a mobile device without an account.
 - [ ] Accessibility checks pass for the MVP flows.
 
 ## Phase 6 — Archive demo, review, and correction loop
@@ -702,7 +710,7 @@ suite passes.
 - [ ] Test voters can distinguish source types.
 - [ ] No high-severity citation, privacy, or accessibility defect remains.
 - [ ] Correction workflow works end to end.
-- [ ] Staging rollback has been exercised once.
+- [x] Staging rollback has been exercised once.
 
 ## Phase 7 — Optional ballot discovery and OCR
 
