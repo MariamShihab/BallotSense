@@ -218,6 +218,11 @@ complete, even if related setup work has begun.
 - [x] **7.1, provider decision** Project owner approved keeping the archive
       demo manual-only on 2026-07-12. Do not automate address lookup for this
       demo; link to official Santa Clara County ROV lookup services instead.
+- [x] **7.2, OCR decision** Project owner approved skipping OCR and ballot
+      image uploads for the archive demo on 2026-07-12. Added a deferred
+      features backlog so omitted scope remains visible for future review.
+- [x] **7, transition** Phase 7 archive-demo scope is complete. Added a Phase 8
+      transition note for November 3, 2026 release-candidate planning.
 
 ## Phase 0 — Product decisions and governance
 
@@ -767,13 +772,17 @@ suite passes.
 
 **Owner:** You approve; AI supplies feasibility and privacy assessment.
 
-OCR may proceed only if it clearly improves ballot discovery over address entry
-and the team can prove in-memory-only image handling. If it is not clearly
-worth it, skip OCR for the archive demo.
+Decision approved on 2026-07-12: skip OCR and ballot image uploads for the
+archive demo. OCR may be reconsidered only if it clearly improves ballot
+discovery over manual/official lookup and the team can prove in-memory-only
+image handling.
 
 ### 7.3 Implement OCR only after approval
 
 **Owner:** AI.
+
+Status: deferred for archive demo. Keep these requirements for future
+reconsideration.
 
 1. Accept an image only after explicit warning to use an unmarked ballot or
    official sample ballot.
@@ -791,9 +800,11 @@ worth it, skip OCR for the archive demo.
 ### Phase 7 acceptance checklist
 
 - [x] Address errors cannot silently alter the contest list.
-- [ ] No ballot image persistence is detected in tests, storage, or logs.
+- [x] No ballot image persistence is detected in tests, storage, or logs
+      because ballot image upload/OCR is not implemented for the archive demo.
 - [x] Manual contest selection remains available.
-- [ ] OCR can be disabled independently.
+- [x] OCR can be disabled independently by omission; no archive-demo route or
+      UI accepts ballot images.
 
 ## Phase 8 — November/public release decision
 

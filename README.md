@@ -9,14 +9,16 @@ without a link back to reviewed election material.
 - [System design and delivery roadmap](docs/system-design-and-roadmap.md)
 - [Source and citation policy](docs/source-policy.md)
 - [AI execution playbook](docs/ai-execution-playbook.md)
+- [Deferred features and omitted scope](docs/deferred-features.md)
 - [MVP decision packet](docs/mvp-decision-packet.md)
 - [Sequential execution plan](docs/execution-plan.md)
 
 ## Current milestone
 
 We are building the trust layer against an archived June 2026 primary dataset.
-That lets us test sourcing, review, retrieval, citations, and OCR confirmation
-before considering a public November 2026 experience.
+That lets us test sourcing, review, retrieval, and citations before considering
+a public November 2026 experience. Ballot-image upload and OCR are intentionally
+omitted from the archive demo.
 
 The product does **not** tell a voter how to vote. It presents cited,
 attributed comparisons and says when verified information is unavailable.
@@ -106,4 +108,5 @@ Useful individual commands:
 1. Ingest and human-review official June 2026 documents into Firestore.
 2. Build contest-level retrieval that returns only approved chunks.
 3. Require structured, cited output from the generation layer.
-4. Add ballot-photo OCR with user confirmation and in-memory-only image handling.
+4. Revisit deferred convenience features only after privacy and release-corpus
+   checks, including whether OCR is worth adding at all.

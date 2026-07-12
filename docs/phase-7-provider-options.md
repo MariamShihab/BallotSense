@@ -169,3 +169,5 @@ Approved decision as of 2026-07-12:
 Implementation can proceed with a small UI update that labels address discovery
 as “not enabled for this archive demo” and points users to the official County
 ROV lookup pages.
+
+Related deferred scope is tracked in [deferred features](deferred-features.md).

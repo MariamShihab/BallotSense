@@ -217,6 +217,11 @@ export default function Home() {
                 Use the manual contest picker below, or open the official
                 Santa Clara County Registrar of Voters tools in a new tab.
               </p>
+              <p className="mt-2 rounded-md bg-[#f7f3eb] p-3 text-sm leading-6 text-[#665f54]">
+                Ballot upload and OCR are intentionally omitted here. The demo
+                never asks for a ballot image, marked ballot, or sample-ballot
+                photo.
+              </p>
               <div className="mt-3 grid gap-2">
                 {officialLookupLinks.map((link) => (
                   <a
