@@ -223,6 +223,16 @@ complete, even if related setup work has begun.
       features backlog so omitted scope remains visible for future review.
 - [x] **7, transition** Phase 7 archive-demo scope is complete. Added a Phase 8
       transition note for November 3, 2026 release-candidate planning.
+- [x] **8.1, planning scaffold** Added the November 3, 2026
+      release-candidate corpus plan with official source anchors, proposed
+      measure-first scope, coverage matrix requirements, review workflow,
+      evaluation requirements, and go/no-go checklist.
+- [x] **8.1, metadata inventory** Added a metadata-only inventory of currently
+      listed November 3, 2026 statewide measures from the official SOS qualified
+      measures page. This is not a reviewed corpus and nothing is ingested.
+- [x] **8.1, narrowed target set** Narrowed the first release-candidate planning
+      target to Proposition 1 as the primary measure and Proposition 45 as the
+      secondary measure. Proposition 3, 37, and 40 remain backup watchlist items.
 
 ## Phase 0 — Product decisions and governance
 
@@ -815,11 +825,15 @@ reconsideration.
 
 **Owner:** AI gathers and stages; reviewer approves.
 
-1. Wait until official November ballot and voter-guide materials are available.
-2. Build a contest coverage matrix for the exact public geography.
-3. Repeat Phase 2 source ingestion and review for every contest intended for
+1. [x] Create the November release-candidate corpus planning document.
+2. [x] Build a metadata-only statewide measure inventory from official SOS
+   sources.
+3. [x] Narrow the first target set to one or two measures.
+4. [ ] Wait until official November ballot and voter-guide materials are available.
+5. [ ] Build a contest coverage matrix for the exact public geography.
+6. [ ] Repeat Phase 2 source ingestion and review for every contest intended for
    display.
-4. Publish the coverage scope in the UI; do not imply whole-ballot coverage if
+7. [ ] Publish the coverage scope in the UI; do not imply whole-ballot coverage if
    it is partial.
 
 ### 8.2 Run the public-release checks

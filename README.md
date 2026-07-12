@@ -10,6 +10,8 @@ without a link back to reviewed election material.
 - [Source and citation policy](docs/source-policy.md)
 - [AI execution playbook](docs/ai-execution-playbook.md)
 - [Deferred features and omitted scope](docs/deferred-features.md)
+- [Phase 8 November corpus plan](docs/phase-8-november-corpus-plan.md)
+- [Phase 8 statewide measure inventory](docs/phase-8-statewide-measure-inventory.md)
 - [MVP decision packet](docs/mvp-decision-packet.md)
 - [Sequential execution plan](docs/execution-plan.md)
 

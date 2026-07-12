@@ -1,0 +1,171 @@
+{
+  "election_id": "ca-general-2026-11-03",
+  "election_name": "California General Election",
+  "election_date": "2026-11-03",
+  "inventory_created_at": "2026-07-12T00:00:00-07:00",
+  "inventory_status": "metadata_only_not_ingested",
+  "publisher": "California Secretary of State",
+  "source_page": "https://www.sos.ca.gov/elections/ballot-measures/qualified-ballot-measures",
+  "notes": [
+    "This is a Phase 8 planning inventory only.",
+    "No source listed here is approved for retrieval until it is snapshotted, hashed, reviewed, chunked, and approved.",
+    "Official voter guide materials, arguments, rebuttals, and fiscal analyses must be reviewed before public display.",
+    "Initial narrowed target set: Proposition 1 as primary, Proposition 45 as secondary."
+  ],
+  "measures": [
+    {
+      "proposition": "Proposition 1",
+      "working_title": "The Veterans and Affordable Housing Bond Act of 2026",
+      "measure_type": "legislative_bond_act",
+      "official_source_url": "https://elections.cdn.sos.ca.gov/ballot-measures/pdf/sb-417.pdf",
+      "source_label": "SB 417 (Limón) The Veterans and Affordable Housing Bond Act of 2026",
+      "initial_lens_fit": ["housing-affordability"],
+      "source_completeness": "partial",
+      "initial_recommendation": "selected_primary",
+      "review_note": "Primary Phase 8 target. Strong housing-affordability fit and relatively clean bond-measure framing; wait for official voter guide text, title/summary, analysis, and arguments before ingestion."
+    },
+    {
+      "proposition": "Proposition 2",
+      "working_title": "Save for California's Future Act",
+      "measure_type": "legislative_constitutional_amendment",
+      "official_source_url": "https://elections.cdn.sos.ca.gov/ballot-measures/pdf/aca-20.pdf",
+      "source_label": "ACA 20 (Gabriel) Save for California's Future Act",
+      "initial_lens_fit": [],
+      "source_completeness": "partial",
+      "initial_recommendation": "defer",
+      "review_note": "Needs official voter guide materials and issue-lens fit assessment."
+    },
+    {
+      "proposition": "Proposition 3",
+      "working_title": "Extends Existing Tax on High Incomes for Schools and Healthcare",
+      "measure_type": "initiative_constitutional_amendment",
+      "official_source_url": "https://oag.ca.gov/system/files/initiatives/pdfs/25-0016%20%28%26quot%3BThe%20California%20Children%26%23039%3Bs%20Education%20and%20Health%20Care%20Protection%20Act%20of%202026%26quot%3B%29.pdf",
+      "source_label": "25-0016",
+      "initial_lens_fit": ["public-education"],
+      "source_completeness": "partial",
+      "initial_recommendation": "backup_watchlist",
+      "review_note": "Strong public education lens fit, but keep as backup rather than first target to avoid expanding the initial release-candidate scope too quickly."
+    },
+    {
+      "proposition": "Proposition 4",
+      "working_title": "California Fair Elections Act of 2026",
+      "measure_type": "legislative_statute",
+      "official_source_url": "https://elections.cdn.sos.ca.gov/ballot-measures/pdf/sb-42.pdf",
+      "source_label": "SB 42 (Umberg) Political Reform Act of 1974: public campaign financing",
+      "initial_lens_fit": [],
+      "source_completeness": "partial",
+      "initial_recommendation": "defer",
+      "review_note": "Important governance topic but outside current issue-lens set."
+    },
+    {
+      "proposition": "Proposition 5",
+      "working_title": "Recall of State Officers",
+      "measure_type": "legislative_constitutional_amendment",
+      "official_source_url": "https://elections.cdn.sos.ca.gov/ballot-measures/pdf/sca-1-24.pdf",
+      "source_label": "SCA 1 (Newman) Elections: recall of state officers",
+      "initial_lens_fit": [],
+      "source_completeness": "partial",
+      "initial_recommendation": "defer",
+      "review_note": "Outside current issue-lens set."
+    },
+    {
+      "proposition": "Proposition 37",
+      "working_title": "Middle-Class Homeownership and Family Home Construction Act of 2026",
+      "measure_type": "initiative_statute",
+      "official_source_url": "https://oag.ca.gov/system/files/initiatives/pdfs/25-0013A1%20%28%26quot%3BCalifornia%20Middle-Class%20Homeownership%20and%20Family%20Home%20Construction%20Act%20of%202026%26quot%3B%29_0.pdf",
+      "source_label": "25-0013A1",
+      "initial_lens_fit": ["housing-affordability"],
+      "source_completeness": "partial",
+      "initial_recommendation": "backup_watchlist",
+      "review_note": "Strong housing lens fit, but Proposition 1 is the cleaner first housing target. Keep this as a backup if source coverage is better than Proposition 1."
+    },
+    {
+      "proposition": "Proposition 38",
+      "working_title": "Authorizes Bonds for Immunology Research",
+      "measure_type": "initiative_statute",
+      "official_source_url": "https://oag.ca.gov/system/files/initiatives/pdfs/25-0026A1%20%28Immunology%29.pdf",
+      "source_label": "25-0026A1",
+      "initial_lens_fit": [],
+      "source_completeness": "partial",
+      "initial_recommendation": "defer",
+      "review_note": "Health/research topic is outside current issue-lens set."
+    },
+    {
+      "proposition": "Proposition 39",
+      "working_title": "Additional Voter Identification and Citizenship Verification Requirements",
+      "measure_type": "initiative_constitutional_amendment",
+      "official_source_url": "https://oag.ca.gov/system/files/initiatives/pdfs/25-0007A1%20%28%28Voter%20ID%29%29.pdf",
+      "source_label": "25-0007A1",
+      "initial_lens_fit": ["public-safety"],
+      "source_completeness": "partial",
+      "initial_recommendation": "defer",
+      "review_note": "Potential public-safety/election-administration relevance, but high risk of political inference; defer unless source framing is very clear."
+    },
+    {
+      "proposition": "Proposition 40",
+      "working_title": "One-Time Tax on Certain Individuals and Trusts",
+      "measure_type": "initiative_constitutional_amendment_and_statute",
+      "official_source_url": "https://oag.ca.gov/system/files/initiatives/pdfs/25-0024A1%20%28Billionaire%20Tax%20%29.pdf",
+      "source_label": "25-0024A1",
+      "initial_lens_fit": ["public-education"],
+      "source_completeness": "partial",
+      "initial_recommendation": "backup_watchlist",
+      "review_note": "Possible education funding connection; keep as backup because tax framing needs careful attribution and voter guide materials."
+    },
+    {
+      "proposition": "Proposition 41",
+      "working_title": "Audits of Programs Funded by New State Special Taxes",
+      "measure_type": "initiative_constitutional_amendment",
+      "official_source_url": "https://oag.ca.gov/system/files/initiatives/pdfs/25-0040A1%20%28Gov.%20Efficiency%29.pdf",
+      "source_label": "25-0040A1",
+      "initial_lens_fit": [],
+      "source_completeness": "partial",
+      "initial_recommendation": "defer",
+      "review_note": "Governance/tax oversight topic outside current issue-lens set."
+    },
+    {
+      "proposition": "Proposition 42",
+      "working_title": "Prohibits New State Personal Property Taxes and Certain Retroactive State Taxes",
+      "measure_type": "initiative_constitutional_amendment",
+      "official_source_url": "https://oag.ca.gov/system/files/initiatives/pdfs/25-0041A1%20%28Retirement%20Protection%20%29.pdf",
+      "source_label": "25-0041A1",
+      "initial_lens_fit": [],
+      "source_completeness": "partial",
+      "initial_recommendation": "defer",
+      "review_note": "Tax policy topic outside current issue-lens set."
+    },
+    {
+      "proposition": "Proposition 43",
+      "working_title": "Local Taxes: Limitation",
+      "measure_type": "legislative_constitutional_amendment",
+      "official_source_url": "https://elections.cdn.sos.ca.gov/ballot-measures/pdf/aca-22.pdf",
+      "source_label": "ACA 22 (Wicks) Local taxes: limitation",
+      "initial_lens_fit": ["housing-affordability", "public-education"],
+      "source_completeness": "partial",
+      "initial_recommendation": "defer",
+      "review_note": "Possible local funding relevance, but issue-lens fit needs official analysis before inclusion."
+    },
+    {
+      "proposition": "Proposition 44",
+      "working_title": "Clinic Funding Accountability and Transparency Act",
+      "measure_type": "initiative_statute",
+      "official_source_url": "https://oag.ca.gov/system/files/initiatives/pdfs/25-0008A1%20%28%26quot%3BClinic%20Funding%20Accountability%20and%20Transparency%20Act%26quot%3B%29.pdf",
+      "source_label": "25-0008A1",
+      "initial_lens_fit": [],
+      "source_completeness": "partial",
+      "initial_recommendation": "defer",
+      "review_note": "Health clinic topic outside current issue-lens set."
+    },
+    {
+      "proposition": "Proposition 45",
+      "working_title": "Environmental Review for Certain Projects",
+      "measure_type": "initiative_statute",
+      "official_source_url": "https://oag.ca.gov/system/files/initiatives/pdfs/25-0023A1%20%28%26quot%3BEssential%20Projects%26quot%3B%29.pdf",
+      "source_label": "25-0023A1",
+      "initial_lens_fit": ["climate-environment", "housing-affordability"],
+      "source_completeness": "partial",
+      "initial_recommendation": "selected_secondary",
+      "review_note": "Secondary Phase 8 target. Strong climate/environment and housing-adjacent fit; likely a good candidate after voter guide materials are available."
+    }
+  ]
+}
