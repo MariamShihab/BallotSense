@@ -1,0 +1,74 @@
+{
+  "election_id": "ca-scc-2026-primary",
+  "contest_id": "scvosa-measure-d",
+  "reviewed_at": "2026-07-12T07:27:31Z",
+  "reviewer": "Project owner (user)",
+  "chunks": [
+    {
+      "id": "scvosa-measure-d-analysis-tax",
+      "source_id": "scvosa-measure-d-impartial-analysis",
+      "election_id": "ca-scc-2026-primary",
+      "contest_id": "scvosa-measure-d",
+      "text": "The Santa Clara Valley Open Space Authority (Authority) was created by the California Legislature to preserve open space in Santa Clara County. A petition signed by the requisite number of voters has placed on the ballot a measure to enact a tax of $0.02 per square foot of building area on real property on parcels within Authority boundaries, with a cap of $7,500 per parcel.\n\nThe tax, if approved by a majority of voters, would commence on July 1, 2026, and remain in effect until repealed by voters. In accordance with the Measure, beginning July 1, 2027, the Authority's Governing Board (Board) may annually adjust the tax amount in accordance with the Consumer Price Index for the San Francisco-Oakland-Hayward statistical area, as reported by the United States Bureau of Labor Statistics.",
+      "locator": "PDF p. 1, opening two paragraphs",
+      "reviewed_at": "2026-07-12T07:27:31Z",
+      "reviewer": "Project owner (user)",
+      "embedding": null
+    },
+    {
+      "id": "scvosa-measure-d-analysis-accountability",
+      "source_id": "scvosa-measure-d-impartial-analysis",
+      "election_id": "ca-scc-2026-primary",
+      "contest_id": "scvosa-measure-d",
+      "text": "Measure D provides additional accountability measures for the tax proceeds, including (1) depositing the proceeds into a special fund used exclusively for Measure D purposes, and (2) providing an annual report to the Board detailing the amount of funds collected and expended and the status of any project authorized to be funded by the tax. Measure D also provides that the Board shall hold at least one public meeting annually to gain public input on spending the tax proceeds, conduct an annual independent audit of tax funds, and maintain an existing oversight committee to review Measure D expenditures.",
+      "locator": "PDF p. 1, accountability paragraph",
+      "reviewed_at": "2026-07-12T07:27:31Z",
+      "reviewer": "Project owner (user)",
+      "embedding": null
+    },
+    {
+      "id": "scvosa-measure-d-analysis-vote-effect",
+      "source_id": "scvosa-measure-d-impartial-analysis",
+      "election_id": "ca-scc-2026-primary",
+      "contest_id": "scvosa-measure-d",
+      "text": "A \"yes\" vote is a vote to enact a tax of $0.02 per square foot of building area on parcels within Authority boundaries, with a $7,500 per-parcel cap and potential annual adjustments in accordance with the Consumer Price Index, beginning July 1, 2026.\n\nA \"no\" vote is a vote to not enact the tax.",
+      "locator": "PDF p. 2, vote-effect statements",
+      "reviewed_at": "2026-07-12T07:27:31Z",
+      "reviewer": "Project owner (user)",
+      "embedding": null
+    },
+    {
+      "id": "scvosa-measure-d-argument-in-favor",
+      "source_id": "scvosa-measure-d-argument-in-favor",
+      "election_id": "ca-scc-2026-primary",
+      "contest_id": "scvosa-measure-d",
+      "text": "Argument in Favor of Measure D\nFirefighters, Green Foothills, the League of Women Voters, and Congressman Sam Liccardo Agree:\n\nPlease join us in voting YES on Measure D. We need to act now to protect the Santa Clara Valley from wildfires, safeguard clean drinking water, and protect disappearing natural areas before they're gone forever.\n\nFor over 30 years, the Santa Clara Valley Open Space Authority (SCVOSA) has protected 30,000 acres of open space and natural areas, helping ensure they remain for future generations. It's important to note that for every $1 of local tax revenue spent on projects, the SCVOSA has raised another $3 in outside funding.\n\nVote YES on D to:\n\u2022 Reduce catastrophic wildfire risk by removing hazardous brush\n\u2022 Protect our drinking water sources, including rivers, creeks, and streams from pollution\n\u2022 Address illegal activity and vandalism in natural open space areas\n\u2022 Help clean up pollution and litter in natural areas\n\u2022 Protect our area's farms and healthy, local food sources\n\u2022 Maintain and restore wildlife habitats and corridors\n\u2022 Prevent overdevelopment of scenic hillsides, natural open spaces, and farmland so they don't become office buildings and parking lots, and ensure opportunities to build new trails\n\nVote YES on D to ensure fiscal accountability and local control.\n\u2022 Annual audits of spending and independent taxpayer oversight to ensure all funds are spent locally and as promised.\n\u2022 An optional tax exemption for seniors over 65 and qualified low-income residents is included.\n\u2022 A publicly available expenditure plan restricts how funds will be spent.",
+      "locator": "PDF p. 20, Argument in Favor of Measure D",
+      "reviewed_at": "2026-07-12T07:27:31Z",
+      "reviewer": "Project owner (user)",
+      "embedding": null
+    },
+    {
+      "id": "scvosa-measure-d-rebuttal-to-favor",
+      "source_id": "scvosa-measure-d-rebuttal-to-favor",
+      "election_id": "ca-scc-2026-primary",
+      "contest_id": "scvosa-measure-d",
+      "text": "Open Space Authority (Santa Clara County) parcel tax, Measure D\nJune 2, 2026\nREBUTTAL TO THE ARGUMENT IN FAVOR\n\nHow much election cheating are you willing to tolerate?\n\nWhat if for an allegedly good cause? Different answer?\n\nDo you know all the officials with duties related to local measure elections? County supervisors, registrar of voters, county counsel, boards of trustees. Many public officials, most getting salaries you could never dream of.\n\nAre these officials corrupt? All of them?\n\nThen how do you explain that at every election, they all look the other way or point fingers, saying, \"It's not my job to enforce measure election laws\"?",
+      "locator": "PDF p. 5, Rebuttal to the Argument in Favor",
+      "reviewed_at": "2026-07-12T07:27:31Z",
+      "reviewer": "Project owner (user)",
+      "embedding": null
+    },
+    {
+      "id": "scvosa-measure-d-rebuttal-to-against",
+      "source_id": "scvosa-measure-d-rebuttal-to-against",
+      "election_id": "ca-scc-2026-primary",
+      "contest_id": "scvosa-measure-d",
+      "text": "Rebuttal to the Argument Against Measure D\n\nMeasure D qualified for the ballot through a lawful, transparent process after 42,000+ residents signed petitions to give voters the chance to decide.\n\nThe argument against Measure D relies on conspiracy theories and accusations, not facts.\n\nMeasure D includes strong accountability safeguards. Independent citizen oversight, annual audits, and a public expenditure plan ensure funds are spent locally and as authorized. An optional exemption for seniors 65+ and qualified low-income residents is included.\n\nYes on D: Reduce catastrophic wildfire risk by removing hazardous brush; protect drinking water sources from pollution; address illegal activity and vandalism in natural open space areas; help clean up pollution and litter; protect farms and local food sources; maintain and restore wildlife habitats and corridors; prevent overdevelopment of scenic hillsides, natural open spaces, and farmland, and ensure opportunities to build trails.\n\nVote YES on Measure D.",
+      "locator": "PDF p. 2, Rebuttal to the Argument Against Measure D",
+      "reviewed_at": "2026-07-12T07:27:31Z",
+      "reviewer": "Project owner (user)",
+      "embedding": null
+    }
+  ]
+}

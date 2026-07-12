@@ -1,5 +1,7 @@
 """Citation-first API entry point."""
 
+from typing import Annotated
+
 from fastapi import Depends, FastAPI, HTTPException, status
 
 from .models import SourceCatalogResponse, SourceDocument
@@ -20,6 +22,9 @@ def get_repository() -> SourceRepository:
     return repository
 
 
+SourceRepositoryDependency = Annotated[SourceRepository, Depends(get_repository)]
+
+
 @app.get("/healthz", tags=["operations"])
 def health_check() -> dict[str, str]:
     return {"status": "ok"}
@@ -27,8 +32,8 @@ def health_check() -> dict[str, str]:
 
 @app.get("/v1/sources", response_model=SourceCatalogResponse, tags=["sources"])
 def list_sources(
+    source_repository: SourceRepositoryDependency,
     election_id: str | None = None,
-    source_repository: SourceRepository = Depends(get_repository),
 ) -> SourceCatalogResponse:
     return SourceCatalogResponse(sources=source_repository.list_sources(election_id))
 
@@ -36,7 +41,7 @@ def list_sources(
 @app.get("/v1/sources/{source_id}", response_model=SourceDocument, tags=["sources"])
 def get_source(
     source_id: str,
-    source_repository: SourceRepository = Depends(get_repository),
+    source_repository: SourceRepositoryDependency,
 ) -> SourceDocument:
     source = source_repository.get_source(source_id)
     if source is None:

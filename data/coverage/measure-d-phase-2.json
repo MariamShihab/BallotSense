@@ -1,0 +1,65 @@
+{
+  "election_id": "ca-scc-2026-primary",
+  "prepared_at": "2026-07-12T07:27:31Z",
+  "prepared_by": "AI assistant",
+  "reviewer": "Project owner (user)",
+  "reviewed_at": "2026-07-12T07:27:31Z",
+  "review_decision": "approved",
+  "scope": "Archived June 2026 demo corpus; Measure D only. Board of Supervisors, District 1 remains intentionally un-ingested.",
+  "contests": [
+    {
+      "contest_id": "scvosa-measure-d",
+      "entity_type": "measure",
+      "entity_name": "Measure D — Santa Clara Valley Open Space Authority Special Parcel Tax",
+      "approved_source_types": {
+        "tier_1_elections_office_material": [
+          "scvosa-measure-d-impartial-analysis"
+        ],
+        "tier_2_officially_filed_ballot_argument_or_rebuttal": [
+          "scvosa-measure-d-argument-in-favor",
+          "scvosa-measure-d-rebuttal-to-favor",
+          "scvosa-measure-d-rebuttal-to-against"
+        ]
+      },
+      "issue_lenses": [
+        {
+          "lens_id": "housing-affordability",
+          "coverage": "limited",
+          "approved_evidence_scope": "The impartial analysis describes the parcel-tax amount, cap, and optional qualifying exemptions. No approved source supports a broader affordability conclusion.",
+          "expected_response": "Describe the cited tax and exemption mechanics; do not infer an affordability position."
+        },
+        {
+          "lens_id": "public-safety",
+          "coverage": "limited",
+          "approved_evidence_scope": "The impartial analysis describes stated purposes that include reducing catastrophic wildfire risks. Tier 2 filings contain additional attributed claims about wildfire risk and illegal activity.",
+          "expected_response": "Separate the Tier 1 measure description from attributed ballot-argument claims."
+        },
+        {
+          "lens_id": "climate-environment",
+          "coverage": "moderate",
+          "approved_evidence_scope": "The impartial analysis describes protected open space, habitat, water resources, agricultural lands, and the measure's stated purposes. Tier 2 filings provide attributed supporting and rebuttal perspectives.",
+          "expected_response": "Present the Tier 1 description and label every Tier 2 statement by speaker side."
+        },
+        {
+          "lens_id": "public-education",
+          "coverage": "none",
+          "approved_evidence_scope": "No approved Measure D source chunk addresses public education.",
+          "expected_response": "Return insufficient_evidence. Do not infer education effects from the tax, conservation, or public-safety material.",
+          "deliberate_evidence_gap": true
+        }
+      ],
+      "known_gaps": [
+        "The official primary argument against Measure D was not retrieved and is not in the corpus.",
+        "No approved Measure D chunk addresses public education."
+      ]
+    },
+    {
+      "contest_id": "scc-bos-district-1",
+      "entity_type": "candidate_race",
+      "entity_name": "Santa Clara County Board of Supervisors, District 1",
+      "approved_source_types": {},
+      "candidate_coverage": "No candidate source has been ingested, reviewed, or approved. This second demo contest is intentionally outside the current corpus release.",
+      "expected_response": "Return not_covered for every issue lens and do not make candidate-position claims."
+    }
+  ]
+}

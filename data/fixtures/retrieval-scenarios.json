@@ -1,0 +1,63 @@
+{
+  "purpose": "Phase 2 synthetic retrieval-policy fixtures. They contain no generated election claims.",
+  "scenarios": [
+    {
+      "id": "correct-approved-source",
+      "request": {
+        "election_id": "ca-scc-2026-primary",
+        "contest_id": "scvosa-measure-d"
+      },
+      "candidate_chunk": {
+        "source_id": "scvosa-measure-d-impartial-analysis",
+        "chunk_id": "scvosa-measure-d-analysis-tax",
+        "source_review_status": "approved",
+        "chunk_review_status": "approved",
+        "election_id": "ca-scc-2026-primary",
+        "contest_id": "scvosa-measure-d"
+      },
+      "expected": "eligible"
+    },
+    {
+      "id": "wrong-contest",
+      "request": {
+        "election_id": "ca-scc-2026-primary",
+        "contest_id": "scc-bos-district-1"
+      },
+      "candidate_chunk": {
+        "source_id": "scvosa-measure-d-impartial-analysis",
+        "chunk_id": "scvosa-measure-d-analysis-tax",
+        "source_review_status": "approved",
+        "chunk_review_status": "approved",
+        "election_id": "ca-scc-2026-primary",
+        "contest_id": "scvosa-measure-d"
+      },
+      "expected": "exclude_wrong_contest"
+    },
+    {
+      "id": "rejected-source",
+      "request": {
+        "election_id": "ca-scc-2026-primary",
+        "contest_id": "scvosa-measure-d"
+      },
+      "candidate_chunk": {
+        "source_id": "synthetic-rejected-source",
+        "chunk_id": "synthetic-rejected-chunk",
+        "source_review_status": "rejected",
+        "chunk_review_status": "approved",
+        "election_id": "ca-scc-2026-primary",
+        "contest_id": "scvosa-measure-d"
+      },
+      "expected": "exclude_rejected_source"
+    },
+    {
+      "id": "no-source-for-public-education",
+      "request": {
+        "election_id": "ca-scc-2026-primary",
+        "contest_id": "scvosa-measure-d",
+        "lens_id": "public-education"
+      },
+      "candidate_chunks": [],
+      "expected": "insufficient_evidence"
+    }
+  ]
+}

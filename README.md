@@ -8,6 +8,9 @@ without a link back to reviewed election material.
 
 - [System design and delivery roadmap](docs/system-design-and-roadmap.md)
 - [Source and citation policy](docs/source-policy.md)
+- [AI execution playbook](docs/ai-execution-playbook.md)
+- [MVP decision packet](docs/mvp-decision-packet.md)
+- [Sequential execution plan](docs/execution-plan.md)
 
 ## Current milestone
 
@@ -25,6 +28,26 @@ attributed comparisons and says when verified information is unavailable.
 - `ballotsense_api/` — FastAPI contracts and source-catalog endpoints.
 - `tests/` — checks that claims cannot be constructed without citations and
   approved sources require a recorded review time.
+- `web/` — React Router framework app with Tailwind styling.
+- `.github/workflows/ci.yml` — pull-request checks for the API and web app.
+
+## Architecture
+
+```mermaid
+flowchart LR
+    User["Browser session"] --> Web["React Router web app"]
+    Web --> API["FastAPI contract API"]
+    API --> Repo["Reviewed source repository"]
+    Repo --> Firestore["Firestore vector search, Phase 3"]
+    API --> Gemini["Gemini constrained generation, Phase 4"]
+    Gemini --> API
+    API --> Web
+```
+
+The current Phase 1 app keeps selected demo contests and lenses in React state
+only. Reloading the page clears the session. It does not create accounts, store
+voter preferences, upload ballot images, write browser storage, or attach
+analytics identifiers.
 
 ## Run locally
 
@@ -35,16 +58,31 @@ dependencies:
 python3 -m venv .venv
 source .venv/bin/activate
 python -m pip install -e '.[dev]'
-uvicorn ballotsense_api.main:app --reload
+make api-dev
 ```
 
 The API documentation is available at `http://127.0.0.1:8000/docs`.
 
+Run the web app separately:
+
+```bash
+cd web
+npm install
+npm run dev
+```
+
 Run checks with:
 
 ```bash
-pytest
+make check
 ```
+
+Useful individual commands:
+
+- `make api-lint` — lint the Python API with Ruff.
+- `make api-test` — run the API contract tests.
+- `make web-check` — run React Router type generation, TypeScript, and build.
+- `make api-format` — format Python files with Ruff.
 
 ## Next
 
