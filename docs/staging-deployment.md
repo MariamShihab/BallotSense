@@ -34,9 +34,9 @@ staging service account.
 ## Images
 
 - API image:
-  `us-west1-docker.pkg.dev/ballotsense-mvp/ballotsense-staging/api:20260712-152fdc8`
+  `us-west1-docker.pkg.dev/ballotsense-mvp/ballotsense-staging/api:20260712-phase6-corrections`
 - Current web image:
-  `us-west1-docker.pkg.dev/ballotsense-mvp/ballotsense-staging/web:20260712-phase6-review1`
+  `us-west1-docker.pkg.dev/ballotsense-mvp/ballotsense-staging/web:20260712-phase6-corrections`
 
 ## Verified behavior
 
@@ -75,14 +75,34 @@ After the Phase 6 internal review, the frontend was updated to
 `ballotsense-web-staging-00004-qnx` with clearer source labels and
 contest-specific brief headings.
 
+After the Phase 6 correction workflow, the API was updated to
+`ballotsense-api-staging-00002-4kw` and the frontend was updated to
+`ballotsense-web-staging-00005-9r2`.
+
 Current restore command:
 
 ```sh
 gcloud run services update-traffic ballotsense-web-staging \
   --project=ballotsense-mvp \
   --region=us-west1 \
-  --to-revisions=ballotsense-web-staging-00004-qnx=100
+  --to-revisions=ballotsense-web-staging-00005-9r2=100
 ```
+
+## Correction workflow verification
+
+The deployed frontend proxy route was tested with `POST /api/v1/corrections`.
+The staged test report ID was `c734c6ef-c425-45df-b467-9eb5ecbef493`.
+
+Firestore stored the report with:
+
+- citation binding to `scvosa-measure-d-impartial-analysis` and
+  `scvosa-measure-d-analysis-accountability`
+- status `pending`
+- redacted description only
+- `redaction_applied: true`
+
+The same endpoint returned `422` when extra `vote_choice` and `local_note`
+fields were submitted.
 
 ## Budget and logging
 

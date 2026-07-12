@@ -58,6 +58,13 @@ const sourceTypeLabels: Record<string, string> = {
 type Citation = { source_id: string; chunk_id: string; locator: string; public_source_url: string; source_type: string };
 type Finding = { status: string; lens_id: string; summary: { text: string; citations: Citation[]; attribution?: string } | null; explanation: string | null };
 type Brief = { election_id: string; contest_id: string; findings: Finding[]; disclaimer: string };
+type CorrectionDraft = {
+  citationKey: string;
+  description: string;
+  issueType: string;
+  status: "idle" | "submitting" | "submitted" | "error";
+  message: string | null;
+};
 
 export default function Home() {
   const [selectedContest, setSelectedContest] = useState(contests[0].id);
@@ -67,6 +74,7 @@ export default function Home() {
   const [brief, setBrief] = useState<Brief | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [correctionDraft, setCorrectionDraft] = useState<CorrectionDraft | null>(null);
   const activeContest = contests.find((contest) => contest.id === (brief?.contest_id ?? selectedContest)) ?? contests[0];
 
   function toggleLens(lens: string) {
@@ -86,6 +94,7 @@ export default function Home() {
     setNote("");
     setBrief(null);
     setError(null);
+    setCorrectionDraft(null);
   }
 
   async function loadResearch() {
@@ -103,6 +112,43 @@ export default function Home() {
     } catch (requestError) {
       setError(requestError instanceof Error ? requestError.message : "The cited brief is unavailable right now.");
     } finally { setLoading(false); }
+  }
+
+  async function submitCorrection(citation: Citation, lensId: string) {
+    if (!brief || !correctionDraft) return;
+
+    setCorrectionDraft({ ...correctionDraft, status: "submitting", message: null });
+    try {
+      const response = await fetch("/api/v1/corrections", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          election_id: brief.election_id,
+          contest_id: brief.contest_id,
+          lens_id: lensId,
+          source_id: citation.source_id,
+          chunk_id: citation.chunk_id,
+          issue_type: correctionDraft.issueType,
+          description: correctionDraft.description,
+        }),
+      });
+      if (!response.ok) throw new Error("Correction report could not be submitted.");
+      const result = (await response.json()) as { message: string };
+      setCorrectionDraft({
+        ...correctionDraft,
+        description: "",
+        status: "submitted",
+        message: result.message,
+      });
+    } catch (requestError) {
+      setCorrectionDraft({
+        ...correctionDraft,
+        status: "error",
+        message: requestError instanceof Error
+          ? requestError.message
+          : "Correction report could not be submitted.",
+      });
+    }
   }
 
   return (
@@ -238,13 +284,103 @@ export default function Home() {
                       <span className="rounded-full bg-[#edf5ef] px-2 py-1 text-xs font-semibold text-[#405349]">{finding.status}</span>
                     </div>
                     <p className="mt-3 leading-7 text-[#3f3b35]">{finding.summary?.text ?? finding.explanation}</p>
-                    {finding.summary?.citations.map((citation) => (
-                      <details className="mt-4 rounded-md bg-[#f7f3eb] p-3">
+                    {finding.summary?.citations.map((citation) => {
+                      const citationKey = `${citation.source_id}:${citation.chunk_id}`;
+                      const isReporting = correctionDraft?.citationKey === citationKey;
+                      return (
+                      <details key={citationKey} className="mt-4 rounded-md bg-[#f7f3eb] p-3">
                         <summary className="cursor-pointer font-semibold text-[#245c4d]">Inspect source proof</summary>
                         <p className="mt-2 text-sm text-[#665f54]">{sourceTypeLabels[citation.source_type] ?? citation.source_type} · {citation.locator}</p>
                         <a className="mt-2 inline-block text-sm font-semibold text-[#245c4d] underline" href={citation.public_source_url} target="_blank" rel="noreferrer">Open original source</a>
+                        <div className="mt-3 border-t border-[#e1d7c9] pt-3">
+                          <button
+                            type="button"
+                            onClick={() =>
+                              setCorrectionDraft(
+                                isReporting
+                                  ? null
+                                  : {
+                                      citationKey,
+                                      description: "",
+                                      issueType: "misleading_summary",
+                                      status: "idle",
+                                      message: null,
+                                    },
+                              )
+                            }
+                            className="text-sm font-semibold text-[#245c4d] underline"
+                          >
+                            Report an issue with this source
+                          </button>
+                          {isReporting && (
+                            <div className="mt-3 grid gap-3">
+                              <p className="text-sm leading-6 text-[#665f54]">
+                                Reports are tied to this citation. Do not include your
+                                vote choice, address, email, phone number, or private note.
+                              </p>
+                              <label className="grid gap-1 text-sm font-semibold text-[#25231f]">
+                                Issue type
+                                <select
+                                  value={correctionDraft.issueType}
+                                  onChange={(event) =>
+                                    setCorrectionDraft({
+                                      ...correctionDraft,
+                                      issueType: event.target.value,
+                                      status: "idle",
+                                      message: null,
+                                    })
+                                  }
+                                  className="rounded-md border border-[#d1c7b7] bg-white p-2 font-normal"
+                                >
+                                  <option value="misleading_summary">Misleading summary</option>
+                                  <option value="incorrect_source">Incorrect source</option>
+                                  <option value="broken_source_link">Broken source link</option>
+                                  <option value="privacy_concern">Privacy concern</option>
+                                  <option value="other">Other</option>
+                                </select>
+                              </label>
+                              <label className="grid gap-1 text-sm font-semibold text-[#25231f]">
+                                What should a reviewer check?
+                                <textarea
+                                  value={correctionDraft.description}
+                                  onChange={(event) =>
+                                    setCorrectionDraft({
+                                      ...correctionDraft,
+                                      description: event.target.value,
+                                      status: "idle",
+                                      message: null,
+                                    })
+                                  }
+                                  className="rounded-md border border-[#d1c7b7] bg-white p-2 font-normal"
+                                  rows={3}
+                                  maxLength={1000}
+                                  placeholder="Describe the source or claim issue for review"
+                                />
+                              </label>
+                              <button
+                                type="button"
+                                disabled={
+                                  correctionDraft.status === "submitting"
+                                  || correctionDraft.description.trim().length < 10
+                                }
+                                onClick={() => submitCorrection(citation, finding.lens_id)}
+                                className="rounded-md bg-[#245c4d] px-3 py-2 text-sm font-semibold text-white disabled:cursor-not-allowed disabled:bg-[#9aaca3]"
+                              >
+                                {correctionDraft.status === "submitting"
+                                  ? "Submitting report..."
+                                  : "Submit correction report"}
+                              </button>
+                              {correctionDraft.message && (
+                                <p className="text-sm font-semibold text-[#405349]">
+                                  {correctionDraft.message}
+                                </p>
+                              )}
+                            </div>
+                          )}
+                        </div>
                       </details>
-                    ))}
+                    );
+                    })}
                   </article>
                 );
               })}

@@ -36,6 +36,14 @@ class ReviewStatus(StrEnum):
     REJECTED = "rejected"
 
 
+class CorrectionIssueType(StrEnum):
+    INCORRECT_SOURCE = "incorrect_source"
+    MISLEADING_SUMMARY = "misleading_summary"
+    BROKEN_SOURCE_LINK = "broken_source_link"
+    PRIVACY_CONCERN = "privacy_concern"
+    OTHER = "other"
+
+
 class SourceCandidateStatus(StrEnum):
     """A discovered source that is not yet eligible for corpus ingestion."""
 
@@ -297,13 +305,42 @@ class ClaimAuditRecord(BallotSenseModel):
     validator_outcome: str = Field(min_length=1, max_length=120)
 
 
-class CorrectionReport(BallotSenseModel):
-    source_id: str | None = Field(default=None, pattern=r"^[a-z0-9][a-z0-9_-]{2,127}$")
-    chunk_id: str | None = Field(default=None, pattern=r"^[a-z0-9][a-z0-9_-]{2,127}$")
-    contest_id: str | None = Field(default=None, pattern=r"^[a-z0-9][a-z0-9_-]{2,127}$")
-    description: str = Field(min_length=20, max_length=2_000)
-    submitted_at: datetime
+class CorrectionReportRequest(BallotSenseModel):
+    """User-submitted correction bound to an already displayed citation.
+
+    This request intentionally does not accept names, email addresses, voter
+    addresses, ballot choices, free-form values, local notes, or accounts.
+    """
+
+    election_id: str = Field(pattern=r"^[a-z0-9][a-z0-9_-]{2,127}$")
+    contest_id: str = Field(pattern=r"^[a-z0-9][a-z0-9_-]{2,127}$")
+    lens_id: str = Field(pattern=r"^[a-z0-9][a-z0-9_-]{2,127}$")
+    source_id: str = Field(pattern=r"^[a-z0-9][a-z0-9_-]{2,127}$")
+    chunk_id: str = Field(pattern=r"^[a-z0-9][a-z0-9_-]{2,127}$")
+    issue_type: CorrectionIssueType
+    description: str = Field(min_length=10, max_length=1_000)
+
+
+class CorrectionReportRecord(BallotSenseModel):
+    """Redacted correction record safe for reviewer workflow storage."""
+
+    id: str = Field(pattern=r"^[a-f0-9-]{36}$")
+    created_at: datetime
+    election_id: str = Field(pattern=r"^[a-z0-9][a-z0-9_-]{2,127}$")
+    contest_id: str = Field(pattern=r"^[a-z0-9][a-z0-9_-]{2,127}$")
+    lens_id: str = Field(pattern=r"^[a-z0-9][a-z0-9_-]{2,127}$")
+    source_id: str = Field(pattern=r"^[a-z0-9][a-z0-9_-]{2,127}$")
+    chunk_id: str = Field(pattern=r"^[a-z0-9][a-z0-9_-]{2,127}$")
+    issue_type: CorrectionIssueType
+    redacted_description: str = Field(min_length=1, max_length=1_000)
+    redaction_applied: bool
     status: ReviewStatus = ReviewStatus.PENDING
+
+
+class CorrectionReportResponse(BallotSenseModel):
+    report_id: str = Field(pattern=r"^[a-f0-9-]{36}$")
+    status: ReviewStatus
+    message: str = Field(min_length=1, max_length=240)
 
 
 class SourceCatalogResponse(BallotSenseModel):

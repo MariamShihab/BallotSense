@@ -195,6 +195,17 @@ complete, even if related setup work has begun.
       corrected frontend on private staging revision
       `ballotsense-web-staging-00004-qnx`. This does not replace real tester
       sessions.
+- [x] **6.3, correction intake foundation** Added the citation-bound
+      correction report contract, redacted correction service, `POST
+      /v1/corrections` endpoint, frontend source-proof report action, and
+      correction workflow documentation. Reports store only redacted
+      descriptions plus citation binding; extra voter-profile fields are
+      rejected.
+- [x] **6.3, staged correction workflow test** Deployed the correction API and
+      UI to private staging on 2026-07-12. Submitted a staged correction report
+      through the frontend proxy route, verified the Firestore record stored
+      only redacted text plus citation binding, and verified extra
+      voter-profile fields return `422`.
 
 ## Phase 0 — Product decisions and governance
 
@@ -720,7 +731,7 @@ suite passes.
 - [ ] Test voters understand this is research support, not an endorsement.
 - [ ] Test voters can distinguish source types.
 - [ ] No high-severity citation, privacy, or accessibility defect remains.
-- [ ] Correction workflow works end to end.
+- [x] Correction workflow works end to end.
 - [x] Staging rollback has been exercised once.
 
 ## Phase 7 — Optional ballot discovery and OCR

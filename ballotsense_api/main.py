@@ -6,7 +6,15 @@ from typing import Annotated
 from fastapi import Depends, FastAPI, HTTPException, status
 
 from .briefs import BriefService, build_firestore_brief_service
-from .models import BriefRequest, BriefResponse, SourceCatalogResponse, SourceDocument
+from .corrections import CorrectionService, build_firestore_correction_service
+from .models import (
+    BriefRequest,
+    BriefResponse,
+    CorrectionReportRequest,
+    CorrectionReportResponse,
+    SourceCatalogResponse,
+    SourceDocument,
+)
 from .repository import InMemorySourceRepository, SourceRepository
 
 app = FastAPI(
@@ -21,6 +29,7 @@ repository: SourceRepository = InMemorySourceRepository()
 # Deliberately unconfigured by default: a deploy must inject reviewed Firestore
 # retrieval, source metadata, Gemini generation, and a redacted audit store.
 brief_service: BriefService | None = None
+correction_service: CorrectionService | None = None
 
 
 def get_repository() -> SourceRepository:
@@ -43,6 +52,21 @@ def get_brief_service() -> BriefService:
 
 
 BriefServiceDependency = Annotated[BriefService, Depends(get_brief_service)]
+
+
+def get_correction_service() -> CorrectionService:
+    if correction_service is not None:
+        return correction_service
+    project_id = os.environ.get("BALLOTSENSE_GCP_PROJECT")
+    if project_id is None:
+        raise HTTPException(
+            status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+            detail="Correction reporting is not configured.",
+        )
+    return build_firestore_correction_service(project_id)
+
+
+CorrectionServiceDependency = Annotated[CorrectionService, Depends(get_correction_service)]
 
 
 @app.get("/healthz", tags=["operations"])
@@ -76,3 +100,12 @@ def create_brief(
 ) -> BriefResponse:
     """Return a cited brief or an explicit evidence-gap state for each lens."""
     return service.create(request)
+
+
+@app.post("/v1/corrections", response_model=CorrectionReportResponse, tags=["corrections"])
+def create_correction_report(
+    request: CorrectionReportRequest,
+    service: CorrectionServiceDependency,
+) -> CorrectionReportResponse:
+    """Store a redacted correction report bound to a displayed citation."""
+    return service.submit(request)
