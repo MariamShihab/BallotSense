@@ -70,3 +70,13 @@ reviewed.
 Before snapshotting or ingestion, the project owner/source reviewer must
 approve whether to proceed with Proposition 1 only or Proposition 1 plus
 Proposition 45 once official voter guide materials are available.
+
+## Source readiness
+
+The first readiness check was completed on 2026-07-12:
+
+`docs/phase-8-source-readiness-2026-07-12.md`
+
+Result: monitor only. Proposition 1 and Proposition 45 are not ready for
+release-candidate ingestion because full official voter-guide materials have
+not yet been located.

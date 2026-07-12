@@ -12,6 +12,7 @@ without a link back to reviewed election material.
 - [Deferred features and omitted scope](docs/deferred-features.md)
 - [Phase 8 November corpus plan](docs/phase-8-november-corpus-plan.md)
 - [Phase 8 statewide measure inventory](docs/phase-8-statewide-measure-inventory.md)
+- [Phase 8 source readiness check](docs/phase-8-source-readiness-2026-07-12.md)
 - [MVP decision packet](docs/mvp-decision-packet.md)
 - [Sequential execution plan](docs/execution-plan.md)
 

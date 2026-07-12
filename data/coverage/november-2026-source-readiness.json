@@ -1,0 +1,80 @@
+{
+  "election_id": "ca-general-2026-11-03",
+  "readiness_checked_at": "2026-07-12T00:00:00-07:00",
+  "status": "metadata_only_not_ready_for_ingestion",
+  "official_sources_checked": [
+    {
+      "publisher": "California Secretary of State",
+      "title": "General Election - November 3, 2026",
+      "url": "https://www.sos.ca.gov/elections/upcoming-elections/general-election-november-3-2026",
+      "finding": "Election page is available and confirms key election dates and links."
+    },
+    {
+      "publisher": "California Secretary of State",
+      "title": "Qualified Statewide Ballot Measures",
+      "url": "https://www.sos.ca.gov/elections/ballot-measures/qualified-ballot-measures",
+      "finding": "Qualified statewide measure list is available and includes Proposition 1 and Proposition 45."
+    }
+  ],
+  "targets": [
+    {
+      "proposition": "Proposition 1",
+      "working_title": "The Veterans and Affordable Housing Bond Act of 2026",
+      "target_role": "primary",
+      "ready_for_snapshot": false,
+      "ready_for_ingestion": false,
+      "available_official_materials": [
+        {
+          "source_type": "qualified_measure_listing",
+          "publisher": "California Secretary of State",
+          "url": "https://www.sos.ca.gov/elections/ballot-measures/qualified-ballot-measures"
+        },
+        {
+          "source_type": "measure_text_pdf",
+          "publisher": "California Secretary of State",
+          "url": "https://elections.cdn.sos.ca.gov/ballot-measures/pdf/sb-417.pdf"
+        }
+      ],
+      "missing_for_release_candidate": [
+        "official voter guide page or PDF",
+        "official title and summary suitable for voter-facing citation",
+        "official fiscal or legislative analysis",
+        "official argument in favor",
+        "official argument against",
+        "official rebuttals, if any",
+        "stable voter-guide locators"
+      ],
+      "decision": "monitor"
+    },
+    {
+      "proposition": "Proposition 45",
+      "working_title": "Environmental Review for Certain Projects",
+      "target_role": "secondary",
+      "ready_for_snapshot": false,
+      "ready_for_ingestion": false,
+      "available_official_materials": [
+        {
+          "source_type": "qualified_measure_listing",
+          "publisher": "California Secretary of State",
+          "url": "https://www.sos.ca.gov/elections/ballot-measures/qualified-ballot-measures"
+        },
+        {
+          "source_type": "initiative_text_pdf",
+          "publisher": "California Department of Justice / Attorney General",
+          "url": "https://oag.ca.gov/system/files/initiatives/pdfs/25-0023A1%20%28%26quot%3BEssential%20Projects%26quot%3B%29.pdf"
+        }
+      ],
+      "missing_for_release_candidate": [
+        "official voter guide page or PDF",
+        "official title and summary suitable for voter-facing citation",
+        "official fiscal or legislative analysis",
+        "official argument in favor",
+        "official argument against",
+        "official rebuttals, if any",
+        "stable voter-guide locators"
+      ],
+      "decision": "monitor"
+    }
+  ],
+  "next_check": "Check official SOS voter guide and qualified-measures pages again before snapshotting any release-candidate source."
+}

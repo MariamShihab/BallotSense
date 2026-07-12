@@ -182,5 +182,11 @@ release.
    issue-lens fit.
 3. [x] Recommend one or two measures for the first release-candidate corpus:
    Proposition 1 primary, Proposition 45 secondary.
-4. [ ] Ask the project owner/source reviewer to approve the selected scope before
+4. [x] Check source readiness for Proposition 1 and Proposition 45.
+5. [ ] Ask the project owner/source reviewer to approve the selected scope before
    snapshotting or ingestion.
+
+Current readiness result as of 2026-07-12: monitor only. Qualified-measure
+listings and underlying measure text are available, but voter-guide materials,
+arguments, rebuttals, analyses, and stable voter-guide locators are not ready
+for release-candidate ingestion.

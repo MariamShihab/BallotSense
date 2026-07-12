@@ -233,6 +233,10 @@ complete, even if related setup work has begun.
 - [x] **8.1, narrowed target set** Narrowed the first release-candidate planning
       target to Proposition 1 as the primary measure and Proposition 45 as the
       secondary measure. Proposition 3, 37, and 40 remain backup watchlist items.
+- [x] **8.1, source readiness check** Checked official SOS/AG source readiness
+      for Proposition 1 and Proposition 45. Current status is monitor-only:
+      qualified-measure listings and measure text exist, but full voter-guide
+      packages are not ready for ingestion.
 
 ## Phase 0 — Product decisions and governance
 
@@ -829,11 +833,12 @@ reconsideration.
 2. [x] Build a metadata-only statewide measure inventory from official SOS
    sources.
 3. [x] Narrow the first target set to one or two measures.
-4. [ ] Wait until official November ballot and voter-guide materials are available.
-5. [ ] Build a contest coverage matrix for the exact public geography.
-6. [ ] Repeat Phase 2 source ingestion and review for every contest intended for
+4. [x] Run first source-readiness check for Proposition 1 and Proposition 45.
+5. [ ] Wait until official November ballot and voter-guide materials are available.
+6. [ ] Build a contest coverage matrix for the exact public geography.
+7. [ ] Repeat Phase 2 source ingestion and review for every contest intended for
    display.
-7. [ ] Publish the coverage scope in the UI; do not imply whole-ballot coverage if
+8. [ ] Publish the coverage scope in the UI; do not imply whole-ballot coverage if
    it is partial.
 
 ### 8.2 Run the public-release checks
