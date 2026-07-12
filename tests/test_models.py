@@ -11,7 +11,7 @@ from ballotsense_api.models import (
     CitedClaim,
     Contest,
     ContestType,
-    CorrectionReport,
+    CorrectionReportRequest,
     Election,
     EvidenceFinding,
     EvidenceStatus,
@@ -226,6 +226,8 @@ def test_insufficient_evidence_cannot_hide_an_uncited_claim() -> None:
                         "source_id": "source-one",
                         "chunk_id": "chunk-one",
                         "locator": "p. 1",
+                        "public_source_url": "https://example.gov/source-one.pdf",
+                        "source_type": "elections_office_material",
                     }
                 ],
             ),
@@ -240,6 +242,8 @@ def test_brief_response_rejects_numeric_match_scores_and_recommendations() -> No
                 "source_id": "measure-d-analysis",
                 "chunk_id": "measure-d-analysis-p1",
                 "locator": "p. 1",
+                "public_source_url": "https://example.gov/measure-d-analysis.pdf",
+                "source_type": "elections_office_material",
             }
         ],
     )
@@ -261,16 +265,36 @@ def test_brief_response_rejects_numeric_match_scores_and_recommendations() -> No
         )
 
 
-def test_correction_report_has_reviewable_shape() -> None:
-    report = CorrectionReport(
-        source_id="measure-d-analysis",
-        chunk_id="measure-d-analysis-p1",
-        contest_id="measure-d",
-        description="The locator appears to point to the wrong page in the source snapshot.",
-        submitted_at=datetime.now(UTC),
+def test_correction_report_request_is_bound_to_a_citation() -> None:
+    request = CorrectionReportRequest(
+        election_id="ca-scc-2026-primary",
+        contest_id="scvosa-measure-d",
+        lens_id="climate-environment",
+        source_id="scvosa-measure-d-impartial-analysis",
+        chunk_id="scvosa-measure-d-analysis-accountability",
+        issue_type="misleading_summary",
+        description="The summary should be checked against this specific source.",
     )
 
-    assert report.status == ReviewStatus.PENDING
+    assert request.source_id == "scvosa-measure-d-impartial-analysis"
+    assert request.chunk_id == "scvosa-measure-d-analysis-accountability"
+
+
+def test_correction_report_rejects_voter_profile_fields() -> None:
+    with pytest.raises(ValidationError):
+        CorrectionReportRequest.model_validate(
+            {
+                "election_id": "ca-scc-2026-primary",
+                "contest_id": "scvosa-measure-d",
+                "lens_id": "climate-environment",
+                "source_id": "scvosa-measure-d-impartial-analysis",
+                "chunk_id": "scvosa-measure-d-analysis-accountability",
+                "issue_type": "misleading_summary",
+                "description": "Please check the source attribution.",
+                "local_note": "This private note must never be accepted.",
+                "vote_choice": "yes",
+            }
+        )
 
 
 def test_candidate_contract_binds_candidate_to_contest() -> None:

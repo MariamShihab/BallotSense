@@ -36,6 +36,14 @@ class ReviewStatus(StrEnum):
     REJECTED = "rejected"
 
 
+class CorrectionIssueType(StrEnum):
+    INCORRECT_SOURCE = "incorrect_source"
+    MISLEADING_SUMMARY = "misleading_summary"
+    BROKEN_SOURCE_LINK = "broken_source_link"
+    PRIVACY_CONCERN = "privacy_concern"
+    OTHER = "other"
+
+
 class SourceCandidateStatus(StrEnum):
     """A discovered source that is not yet eligible for corpus ingestion."""
 
@@ -63,6 +71,7 @@ class SourceDocument(BallotSenseModel):
     published_at: date | None = None
     content_sha256: str = Field(pattern=r"^[a-f0-9]{64}$")
     snapshot_uri: str = Field(pattern=r"^gs://[a-z0-9][a-z0-9._-]{1,220}/.+$")
+    corpus_release_id: str | None = Field(default=None, min_length=1, max_length=160)
     review_status: ReviewStatus
     reviewed_at: datetime | None = None
     reviewer: str | None = Field(default=None, min_length=1, max_length=120)
@@ -138,27 +147,67 @@ class SourceChunk(BallotSenseModel):
     embedding: list[float] | None = None
 
 
+class EvidenceStatus(StrEnum):
+    SUPPORTED = "supported"
+    INSUFFICIENT_EVIDENCE = "insufficient_evidence"
+    PENDING_REVIEW = "pending_review"
+    NOT_COVERED = "not_covered"
+
+
+class RetrievedChunk(BallotSenseModel):
+    """A reviewed source excerpt returned by filtered vector retrieval."""
+
+    source_id: str = Field(pattern=r"^[a-z0-9][a-z0-9_-]{2,127}$")
+    chunk_id: str = Field(pattern=r"^[a-z0-9][a-z0-9_-]{2,127}$")
+    election_id: str = Field(pattern=r"^[a-z0-9][a-z0-9_-]{2,127}$")
+    contest_id: str = Field(pattern=r"^[a-z0-9][a-z0-9_-]{2,127}$")
+    source_type: SourceType
+    source_tier: int = Field(ge=1, le=3)
+    locator: str = Field(min_length=1, max_length=240)
+    text: str = Field(min_length=1, max_length=10_000)
+    distance: float = Field(ge=0)
+
+
+class RetrievalRequest(BallotSenseModel):
+    """Internal retrieval input; no voter profile or free-text values."""
+
+    election_id: str = Field(pattern=r"^[a-z0-9][a-z0-9_-]{2,127}$")
+    contest_id: str = Field(pattern=r"^[a-z0-9][a-z0-9_-]{2,127}$")
+    lens_id: str = Field(pattern=r"^[a-z0-9][a-z0-9_-]{2,127}$")
+    query_text: str = Field(min_length=1, max_length=1_000)
+    limit: int = Field(default=6, ge=1, le=12)
+
+
+class RetrievalResult(BallotSenseModel):
+    request: RetrievalRequest
+    status: EvidenceStatus
+    chunks: list[RetrievedChunk] = Field(default_factory=list)
+
+    @model_validator(mode="after")
+    def evidence_state_matches_chunks(self) -> RetrievalResult:
+        if self.status == EvidenceStatus.SUPPORTED and not self.chunks:
+            raise ValueError("supported retrieval results require chunks")
+        if self.status == EvidenceStatus.INSUFFICIENT_EVIDENCE and self.chunks:
+            raise ValueError("insufficient evidence results cannot carry chunks")
+        return self
+
+
 class Citation(BallotSenseModel):
     """A citation from a generated claim back to an approved source chunk."""
 
     source_id: str = Field(pattern=r"^[a-z0-9][a-z0-9_-]{2,127}$")
     chunk_id: str = Field(pattern=r"^[a-z0-9][a-z0-9_-]{2,127}$")
     locator: str = Field(min_length=1, max_length=240)
+    public_source_url: HttpUrl
+    source_type: SourceType
 
 
 class CitedClaim(BallotSenseModel):
     """A claim eligible for display in the voter-facing application."""
 
-    text: str = Field(min_length=1, max_length=1_500)
-    citations: list[Citation] = Field(min_length=1)
+    text: str = Field(min_length=1, max_length=10_000)
+    citations: list[Citation] = Field(min_length=1, max_length=4)
     attribution: str | None = Field(default=None, max_length=240)
-
-
-class EvidenceStatus(StrEnum):
-    SUPPORTED = "supported"
-    INSUFFICIENT_EVIDENCE = "insufficient_evidence"
-    PENDING_REVIEW = "pending_review"
-    NOT_COVERED = "not_covered"
 
 
 class ContestType(StrEnum):
@@ -239,17 +288,59 @@ class BriefRequest(BallotSenseModel):
 class BriefResponse(BallotSenseModel):
     election_id: str = Field(pattern=r"^[a-z0-9][a-z0-9_-]{2,127}$")
     contest_id: str = Field(pattern=r"^[a-z0-9][a-z0-9_-]{2,127}$")
-    findings: list[EvidenceFinding] = Field(min_length=1)
+    findings: list[EvidenceFinding] = Field(min_length=1, max_length=4)
     disclaimer: str = Field(min_length=1, max_length=500)
 
 
-class CorrectionReport(BallotSenseModel):
-    source_id: str | None = Field(default=None, pattern=r"^[a-z0-9][a-z0-9_-]{2,127}$")
-    chunk_id: str | None = Field(default=None, pattern=r"^[a-z0-9][a-z0-9_-]{2,127}$")
-    contest_id: str | None = Field(default=None, pattern=r"^[a-z0-9][a-z0-9_-]{2,127}$")
-    description: str = Field(min_length=20, max_length=2_000)
-    submitted_at: datetime
+class ClaimAuditRecord(BallotSenseModel):
+    """Redacted operational record for a generated brief, never voter data."""
+
+    id: str = Field(pattern=r"^[a-f0-9-]{36}$")
+    created_at: datetime
+    corpus_version: str = Field(min_length=1, max_length=160)
+    election_id: str = Field(pattern=r"^[a-z0-9][a-z0-9_-]{2,127}$")
+    contest_id: str = Field(pattern=r"^[a-z0-9][a-z0-9_-]{2,127}$")
+    lens_ids: list[str] = Field(min_length=1, max_length=4)
+    chunk_ids: list[str] = Field(max_length=12)
+    validator_outcome: str = Field(min_length=1, max_length=120)
+
+
+class CorrectionReportRequest(BallotSenseModel):
+    """User-submitted correction bound to an already displayed citation.
+
+    This request intentionally does not accept names, email addresses, voter
+    addresses, ballot choices, free-form values, local notes, or accounts.
+    """
+
+    election_id: str = Field(pattern=r"^[a-z0-9][a-z0-9_-]{2,127}$")
+    contest_id: str = Field(pattern=r"^[a-z0-9][a-z0-9_-]{2,127}$")
+    lens_id: str = Field(pattern=r"^[a-z0-9][a-z0-9_-]{2,127}$")
+    source_id: str = Field(pattern=r"^[a-z0-9][a-z0-9_-]{2,127}$")
+    chunk_id: str = Field(pattern=r"^[a-z0-9][a-z0-9_-]{2,127}$")
+    issue_type: CorrectionIssueType
+    description: str = Field(min_length=10, max_length=1_000)
+
+
+class CorrectionReportRecord(BallotSenseModel):
+    """Redacted correction record safe for reviewer workflow storage."""
+
+    id: str = Field(pattern=r"^[a-f0-9-]{36}$")
+    created_at: datetime
+    election_id: str = Field(pattern=r"^[a-z0-9][a-z0-9_-]{2,127}$")
+    contest_id: str = Field(pattern=r"^[a-z0-9][a-z0-9_-]{2,127}$")
+    lens_id: str = Field(pattern=r"^[a-z0-9][a-z0-9_-]{2,127}$")
+    source_id: str = Field(pattern=r"^[a-z0-9][a-z0-9_-]{2,127}$")
+    chunk_id: str = Field(pattern=r"^[a-z0-9][a-z0-9_-]{2,127}$")
+    issue_type: CorrectionIssueType
+    redacted_description: str = Field(min_length=1, max_length=1_000)
+    redaction_applied: bool
     status: ReviewStatus = ReviewStatus.PENDING
+
+
+class CorrectionReportResponse(BallotSenseModel):
+    report_id: str = Field(pattern=r"^[a-f0-9-]{36}$")
+    status: ReviewStatus
+    message: str = Field(min_length=1, max_length=240)
 
 
 class SourceCatalogResponse(BallotSenseModel):
