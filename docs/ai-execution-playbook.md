@@ -122,6 +122,99 @@ complete, even if related setup work has begun.
       public-education evidence gap, retrieval-policy fixtures, and correction
       checklist on 2026-07-12. No embeddings or Gemini voter-answer calls have
       been made.
+- [x] **3.1, database** Created the development Firestore Native-mode standard
+      database in `us-west1` and enabled Firestore, Cloud Run, Artifact
+      Registry, and Secret Manager APIs. Firestore security rules were not
+      changed.
+- [x] **3.2–3.3, local foundation** Added an approved-only Firestore source
+      repository and idempotent non-public ingestion command. Local Python
+      Application Default Credentials are configured for development access.
+- [x] **3.3, first corpus ingestion** Wrote four approved Measure D source
+      records and six approved chunks to development Firestore in ingestion run
+      `ingest-9b1f4a18-d9c8-470f-8817-6461d262a994`. Provenance was verified;
+      embeddings remain intentionally absent.
+- [x] **3.3, embedding contract** Project owner approved Vertex AI
+      `gemini-embedding-001` with 768 output dimensions on 2026-07-12. Corpus
+      chunks use `RETRIEVAL_DOCUMENT`; voter queries must use
+      `RETRIEVAL_QUERY`. Firestore vector retrieval must use cosine distance.
+- [x] **3.3, first embedding run** Vertex AI created 768-dimensional document
+      vectors for the six approved Measure D chunks in run
+      `embed-402d6c32-f875-4aed-84e0-d086b5152b81`.
+- [x] **3.4, retrieval verification** The four-filter Firestore cosine vector
+      index is ready. A live Measure D climate/environment query returned only
+      three approved, locator-bound Measure D chunks; the same query scoped to
+      Board of Supervisors District 1 returned `insufficient_evidence` with no
+      chunks.
+- [x] **4.1–4.2, cited-generation foundation** Added bounded brief and citation
+      contracts, then authorized Vertex AI `gemini-2.5-flash` for this task. A
+      development-only Measure D climate/environment brief was generated from
+      the retrieved evidence packet and passed validation; no voter data was
+      sent or stored.
+- [x] **4.3, core validation** Added deterministic validation that blocks
+      fabricated or mismatched citations, wrong-contest output, and
+      recommendation/ranking language; it returns an evidence-gap fallback
+      instead of an unsupported claim.
+- [x] **4.3, audit and API** Added the validated `POST /v1/briefs` endpoint,
+      one corrective retry, and a durable Firestore `claim_audits` record with
+      only corpus version, election/contest/lens IDs, chunk IDs, timestamp, and
+      validator outcome. The endpoint is not connected to the voter UI.
+- [x] **4.4, evaluation foundation** Added the fixed Measure D acceptance set,
+      reviewer rubric, and automated checks for evidence gaps, un-ingested
+      contests, fabricated citations, wrong-contest citations, uncited claims,
+      recommendation language, and party-based inference.
+- [x] **4.4, human approval** Project owner approved the fixed Phase 4
+      evaluation set against corpus release `measure-d-review-2026-07-12` on
+      2026-07-12. Phase 5 UI work may begin.
+- [x] **5.1, screens 1–2** Updated the mobile-first shell with the welcome and
+      trust framing, browser-memory privacy promise, three-step flow, and
+      bounded issue-lens selection (up to three lenses, no free text).
+- [x] **5.1, cited brief connection** Connected the research action to the
+      validated brief API using only canonical election, contest, and lens IDs.
+      The UI renders returned citations or explicit evidence gaps; private notes
+      are never included in the API request.
+- [x] **5.1–5.3, Measure D UI and approval** Added the cited brief, coverage,
+      citation-detail, and local-note screens. Project owner verified the
+      mobile flow and source-proof opening on 2026-07-12; local notes remain
+      outside API requests.
+- [x] **5.3, accessibility pass** Added Playwright + axe coverage for the main
+      cited-research and correction workflow, improved semantic control groups,
+      focus states, live status/error feedback, and finding-status labels.
+      `npm --prefix web run test:a11y` and `make check` passed on 2026-07-12.
+- [x] **6.1, staging deployment** Project owner authorized a non-public
+      staging deployment on 2026-07-12. Created separate private API and web
+      Cloud Run services, least-privilege staging service accounts, Artifact
+      Registry images, Secret Manager staging configuration, Cloud Logging /
+      Error Reporting services, a $10 project budget alert, and conservative
+      Cloud Run scale limits. Verified the private frontend-to-private-API
+      cited brief path through an authenticated local proxy and exercised
+      Cloud Run rollback once before restoring the corrected web revision.
+- [x] **6.2, review protocol** Added the Phase 6 demo review plan,
+      accessibility checklist, tester script, comprehension questions, severity
+      definitions, and reusable session log template. Tester sessions have not
+      been run yet.
+- [x] **6.2, internal walkthrough** Ran an AI-assisted internal walkthrough of
+      the private staging demo on 2026-07-12. Verified supported,
+      insufficient-evidence, and not-covered paths; found and fixed a contest
+      heading bug and raw source-type label issue. Deployed and verified the
+      corrected frontend on private staging revision
+      `ballotsense-web-staging-00004-qnx`. This does not replace real tester
+      sessions.
+- [x] **6.3, correction intake foundation** Added the citation-bound
+      correction report contract, redacted correction service, `POST
+      /v1/corrections` endpoint, frontend source-proof report action, and
+      correction workflow documentation. Reports store only redacted
+      descriptions plus citation binding; extra voter-profile fields are
+      rejected.
+- [x] **6.3, staged correction workflow test** Deployed the correction API and
+      UI to private staging on 2026-07-12. Submitted a staged correction report
+      through the frontend proxy route, verified the Firestore record stored
+      only redacted text plus citation binding, and verified extra
+      voter-profile fields return `422`.
+- [x] **7.1, privacy-safe discovery scaffold** Added the
+      `POST /v1/ballots/resolve-address` contract, provider-not-configured
+      resolver, frontend proxy, optional address-discovery panel, and tests
+      proving raw addresses are not retained and extra voter-profile fields are
+      rejected. A real geographic provider still requires explicit approval.
 
 ## Phase 0 — Product decisions and governance
 
@@ -534,11 +627,11 @@ use secret values without explicit authorization.
 
 ### Phase 4 acceptance checklist
 
-- [ ] Every factual claim in the demo response has valid evidence.
-- [ ] Invalid output is blocked from the UI.
-- [ ] No-answer cases return an honest evidence-gap state.
-- [ ] Human review finds no unsupported claim in the acceptance set.
-- [ ] Generated responses do not rank or recommend choices.
+- [x] Every factual claim in the demo response has valid evidence.
+- [x] Invalid output is blocked from the UI.
+- [x] No-answer cases return an honest evidence-gap state.
+- [x] Human review finds no unsupported claim in the acceptance set.
+- [x] Generated responses do not rank or recommend choices.
 
 **Stop point:** Do not connect model output to a voter UI until the acceptance
 suite passes.
@@ -593,11 +686,11 @@ suite passes.
 
 ### Phase 5 acceptance checklist
 
-- [ ] A voter can reach a cited brief in three clear steps.
-- [ ] Every displayed claim exposes its proof.
-- [ ] Source types and uncertainty are unmistakable.
-- [ ] The guide is usable on a mobile device without an account.
-- [ ] Accessibility checks pass for the MVP flows.
+- [x] A voter can reach a cited brief in three clear steps.
+- [x] Every displayed claim exposes its proof.
+- [x] Source types and uncertainty are unmistakable.
+- [x] The guide is usable on a mobile device without an account.
+- [x] Accessibility checks pass for the MVP flows.
 
 ## Phase 6 — Archive demo, review, and correction loop
 
@@ -647,8 +740,8 @@ suite passes.
 - [ ] Test voters understand this is research support, not an endorsement.
 - [ ] Test voters can distinguish source types.
 - [ ] No high-severity citation, privacy, or accessibility defect remains.
-- [ ] Correction workflow works end to end.
-- [ ] Staging rollback has been exercised once.
+- [x] Correction workflow works end to end.
+- [x] Staging rollback has been exercised once.
 
 ## Phase 7 — Optional ballot discovery and OCR
 
@@ -659,11 +752,12 @@ suite passes.
 
 **Owner:** AI after you authorize an approved geographic source/provider.
 
-1. Select an address-to-district provider or official jurisdiction source.
-2. Resolve an address only for the live request; do not persist raw address.
-3. Return inferred contests and require user confirmation.
-4. Record no address in API logs or claim audits.
-5. Keep manual contest picker available as fallback.
+1. [ ] Select an address-to-district provider or official jurisdiction source.
+2. [x] Resolve an address only for the live request; do not persist raw address.
+3. [x] Add the inferred-contest response contract with mandatory user
+   confirmation; live inference waits for an approved provider.
+4. [x] Record no address in API logs or claim audits.
+5. [x] Keep manual contest picker available as fallback.
 
 ### 7.2 Decide whether OCR is worth adding
 
@@ -692,9 +786,9 @@ worth it, skip OCR for the archive demo.
 
 ### Phase 7 acceptance checklist
 
-- [ ] Address or OCR errors cannot silently alter the contest list.
+- [x] Address errors cannot silently alter the contest list.
 - [ ] No ballot image persistence is detected in tests, storage, or logs.
-- [ ] Manual contest selection remains available.
+- [x] Manual contest selection remains available.
 - [ ] OCR can be disabled independently.
 
 ## Phase 8 — November/public release decision

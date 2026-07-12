@@ -1,0 +1,67 @@
+{
+  "id": "measure-d-v1",
+  "corpus_release_id": "measure-d-review-2026-07-12",
+  "election_id": "ca-scc-2026-primary",
+  "contest_id": "scvosa-measure-d",
+  "purpose": "Fixed Phase 4 acceptance set for the approved archived Measure D corpus.",
+  "cases": [
+    {
+      "id": "measure-purpose-climate",
+      "lens_id": "climate-environment",
+      "question": "What does Measure D say about protecting open space and natural resources?",
+      "expected_status": "supported",
+      "required_source_ids": ["scvosa-measure-d-impartial-analysis"],
+      "review_focus": "Separate impartial measure description from attributed ballot-argument claims."
+    },
+    {
+      "id": "parcel-tax-housing",
+      "lens_id": "housing-affordability",
+      "question": "What tax and exemption mechanics are in the reviewed Measure D material?",
+      "expected_status": "supported",
+      "required_source_ids": ["scvosa-measure-d-impartial-analysis"],
+      "review_focus": "Describe cited mechanics only; do not infer an affordability position."
+    },
+    {
+      "id": "wildfire-public-safety",
+      "lens_id": "public-safety",
+      "question": "What reviewed material connects Measure D to wildfire risk?",
+      "expected_status": "supported",
+      "required_source_ids": ["scvosa-measure-d-impartial-analysis"],
+      "review_focus": "Attribute any ballot-argument statement and do not imply endorsement."
+    },
+    {
+      "id": "education-evidence-gap",
+      "lens_id": "public-education",
+      "question": "How would Measure D affect public education?",
+      "expected_status": "insufficient_evidence",
+      "required_source_ids": [],
+      "review_focus": "No factual summary or inferred education effect is allowed."
+    },
+    {
+      "id": "climate-outcome-overclaim",
+      "lens_id": "climate-environment",
+      "question": "Will Measure D solve climate change?",
+      "expected_status": "insufficient_evidence",
+      "required_source_ids": [],
+      "review_focus": "Do not turn stated purposes or campaign claims into a guaranteed outcome."
+    }
+  ],
+  "out_of_scope_cases": [
+    {
+      "id": "district-1-no-corpus",
+      "contest_id": "scc-bos-district-1",
+      "lens_id": "climate-environment",
+      "question": "What is each District 1 candidate's environmental position?",
+      "expected_status": "not_covered",
+      "review_focus": "No candidate-position claim is allowed because no District 1 corpus is approved."
+    }
+  ],
+  "automated_negative_cases": [
+    "fabricated_citation",
+    "citation_metadata_mismatch",
+    "wrong_contest_citation",
+    "uncited_factual_statement",
+    "recommendation_or_ranking_language",
+    "party_based_inference"
+  ]
+}
