@@ -77,6 +77,23 @@ Run checks with:
 make check
 ```
 
+### Firestore development access
+
+The development Firestore database is Native mode in `us-west1`. To run the
+non-public ingestion command from a developer machine, authenticate Python with
+Application Default Credentials; this opens a Google sign-in flow and stores no
+credential in the repository:
+
+```bash
+gcloud auth application-default login
+.venv/bin/python scripts/ingest_approved_corpus.py \
+  --project ballotsense-mvp \
+  --corpus-release measure-d-review-2026-07-12
+```
+
+The command accepts only the committed, reviewer-approved corpus artifacts and
+does not generate embeddings.
+
 Useful individual commands:
 
 - `make api-lint` — lint the Python API with Ruff.

@@ -138,6 +138,51 @@ class SourceChunk(BallotSenseModel):
     embedding: list[float] | None = None
 
 
+class EvidenceStatus(StrEnum):
+    SUPPORTED = "supported"
+    INSUFFICIENT_EVIDENCE = "insufficient_evidence"
+    PENDING_REVIEW = "pending_review"
+    NOT_COVERED = "not_covered"
+
+
+class RetrievedChunk(BallotSenseModel):
+    """A reviewed source excerpt returned by filtered vector retrieval."""
+
+    source_id: str = Field(pattern=r"^[a-z0-9][a-z0-9_-]{2,127}$")
+    chunk_id: str = Field(pattern=r"^[a-z0-9][a-z0-9_-]{2,127}$")
+    election_id: str = Field(pattern=r"^[a-z0-9][a-z0-9_-]{2,127}$")
+    contest_id: str = Field(pattern=r"^[a-z0-9][a-z0-9_-]{2,127}$")
+    source_type: SourceType
+    source_tier: int = Field(ge=1, le=3)
+    locator: str = Field(min_length=1, max_length=240)
+    text: str = Field(min_length=1, max_length=10_000)
+    distance: float = Field(ge=0)
+
+
+class RetrievalRequest(BallotSenseModel):
+    """Internal retrieval input; no voter profile or free-text values."""
+
+    election_id: str = Field(pattern=r"^[a-z0-9][a-z0-9_-]{2,127}$")
+    contest_id: str = Field(pattern=r"^[a-z0-9][a-z0-9_-]{2,127}$")
+    lens_id: str = Field(pattern=r"^[a-z0-9][a-z0-9_-]{2,127}$")
+    query_text: str = Field(min_length=1, max_length=1_000)
+    limit: int = Field(default=6, ge=1, le=12)
+
+
+class RetrievalResult(BallotSenseModel):
+    request: RetrievalRequest
+    status: EvidenceStatus
+    chunks: list[RetrievedChunk] = Field(default_factory=list)
+
+    @model_validator(mode="after")
+    def evidence_state_matches_chunks(self) -> RetrievalResult:
+        if self.status == EvidenceStatus.SUPPORTED and not self.chunks:
+            raise ValueError("supported retrieval results require chunks")
+        if self.status == EvidenceStatus.INSUFFICIENT_EVIDENCE and self.chunks:
+            raise ValueError("insufficient evidence results cannot carry chunks")
+        return self
+
+
 class Citation(BallotSenseModel):
     """A citation from a generated claim back to an approved source chunk."""
 
@@ -152,13 +197,6 @@ class CitedClaim(BallotSenseModel):
     text: str = Field(min_length=1, max_length=1_500)
     citations: list[Citation] = Field(min_length=1)
     attribution: str | None = Field(default=None, max_length=240)
-
-
-class EvidenceStatus(StrEnum):
-    SUPPORTED = "supported"
-    INSUFFICIENT_EVIDENCE = "insufficient_evidence"
-    PENDING_REVIEW = "pending_review"
-    NOT_COVERED = "not_covered"
 
 
 class ContestType(StrEnum):

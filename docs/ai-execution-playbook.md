@@ -122,6 +122,25 @@ complete, even if related setup work has begun.
       public-education evidence gap, retrieval-policy fixtures, and correction
       checklist on 2026-07-12. No embeddings or Gemini voter-answer calls have
       been made.
+- [x] **3.1, database** Created the development Firestore Native-mode standard
+      database in `us-west1` and enabled Firestore, Cloud Run, Artifact
+      Registry, and Secret Manager APIs. Firestore security rules were not
+      changed.
+- [x] **3.2–3.3, local foundation** Added an approved-only Firestore source
+      repository and idempotent non-public ingestion command. Local Python
+      Application Default Credentials are configured for development access.
+- [x] **3.3, first corpus ingestion** Wrote four approved Measure D source
+      records and six approved chunks to development Firestore in ingestion run
+      `ingest-9b1f4a18-d9c8-470f-8817-6461d262a994`. Provenance was verified;
+      embeddings remain intentionally absent.
+- [x] **3.3, embedding contract** Project owner approved Vertex AI
+      `gemini-embedding-001` with 768 output dimensions on 2026-07-12. Corpus
+      chunks use `RETRIEVAL_DOCUMENT`; voter queries must use
+      `RETRIEVAL_QUERY`. Firestore vector retrieval must use cosine distance.
+- [x] **3.3, first embedding run** Vertex AI created 768-dimensional document
+      vectors for the six approved Measure D chunks in run
+      `embed-402d6c32-f875-4aed-84e0-d086b5152b81`. The Firestore vector index
+      is provisioning; no retrieval query has been issued.
 
 ## Phase 0 — Product decisions and governance
 
