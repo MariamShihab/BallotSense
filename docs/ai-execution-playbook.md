@@ -176,6 +176,10 @@ complete, even if related setup work has begun.
       citation-detail, and local-note screens. Project owner verified the
       mobile flow and source-proof opening on 2026-07-12; local notes remain
       outside API requests.
+- [x] **5.3, accessibility pass** Added Playwright + axe coverage for the main
+      cited-research and correction workflow, improved semantic control groups,
+      focus states, live status/error feedback, and finding-status labels.
+      `npm --prefix web run test:a11y` and `make check` passed on 2026-07-12.
 - [x] **6.1, staging deployment** Project owner authorized a non-public
       staging deployment on 2026-07-12. Created separate private API and web
       Cloud Run services, least-privilege staging service accounts, Artifact
@@ -681,7 +685,7 @@ suite passes.
 - [x] Every displayed claim exposes its proof.
 - [x] Source types and uncertainty are unmistakable.
 - [x] The guide is usable on a mobile device without an account.
-- [ ] Accessibility checks pass for the MVP flows.
+- [x] Accessibility checks pass for the MVP flows.
 
 ## Phase 6 — Archive demo, review, and correction loop
 

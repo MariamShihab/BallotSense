@@ -55,6 +55,8 @@ const sourceTypeLabels: Record<string, string> = {
   official_measure_text: "Official measure text",
 };
 
+const focusRing = "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#245c4d]";
+
 type Citation = { source_id: string; chunk_id: string; locator: string; public_source_url: string; source_type: string };
 type Finding = { status: string; lens_id: string; summary: { text: string; citations: Citation[]; attribution?: string } | null; explanation: string | null };
 type Brief = { election_id: string; contest_id: string; findings: Finding[]; disclaimer: string };
@@ -177,7 +179,7 @@ export default function Home() {
           <section className="rounded-lg border border-[#d1c7b7] bg-[#fffbf2]/90 p-5 shadow-sm">
             <div className="flex items-start justify-between gap-4">
               <div>
-                <h2 className="text-xl font-semibold text-[#191815]">
+                <h2 id="contest-heading" className="text-xl font-semibold text-[#191815]">
                   Demo contest
                 </h2>
                 <p className="mt-1 text-sm text-[#665f54]">
@@ -187,21 +189,21 @@ export default function Home() {
               <button
                 type="button"
                 onClick={resetSession}
-                className="rounded-md border border-[#9c8f7c] px-3 py-2 text-sm font-semibold text-[#453f36] transition hover:bg-[#efe6d7]"
+                className={`rounded-md border border-[#9c8f7c] px-3 py-2 text-sm font-semibold text-[#453f36] transition hover:bg-[#efe6d7] ${focusRing}`}
               >
                 Reset
               </button>
             </div>
 
-            <div className="mt-5 grid gap-3">
+            <fieldset className="mt-5 grid gap-3" aria-labelledby="contest-heading">
               {contests.map((contest) => (
                 <label
                   key={contest.id}
-                  className="flex cursor-pointer items-start gap-3 rounded-md border border-[#ddd2c1] bg-white p-4 transition has-[:checked]:border-[#386859] has-[:checked]:bg-[#edf5ef]"
+                  className={`flex cursor-pointer items-start gap-3 rounded-md border border-[#ddd2c1] bg-white p-4 transition has-[:checked]:border-[#386859] has-[:checked]:bg-[#edf5ef] ${focusRing}`}
                 >
                   <input
                     checked={selectedContest === contest.id}
-                    className="mt-1 h-4 w-4 accent-[#386859]"
+                    className={`mt-1 h-4 w-4 accent-[#386859] ${focusRing}`}
                     name="contest"
                     onChange={() => setSelectedContest(contest.id)}
                     type="radio"
@@ -216,26 +218,26 @@ export default function Home() {
                   </span>
                 </label>
               ))}
-            </div>
+            </fieldset>
           </section>
 
           <section className="rounded-lg border border-[#c3d1c8] bg-[#f8fff9]/90 p-5 shadow-sm">
-            <h2 className="text-xl font-semibold text-[#191815]">
+            <h2 id="lenses-heading" className="text-xl font-semibold text-[#191815]">
               Issue lenses
             </h2>
             <p className="mt-1 text-sm text-[#53675b]">
               The MVP starts with fixed lenses, not free-text political values.
             </p>
 
-            <div className="mt-5 grid gap-3">
+            <fieldset className="mt-5 grid gap-3" aria-labelledby="lenses-heading" aria-describedby="selected-lenses-status">
               {lenses.map((lens) => (
                 <label
                   key={lens.id}
-                  className="flex cursor-pointer items-center gap-3 rounded-md border border-[#d2dfd6] bg-white px-4 py-3 transition has-[:checked]:border-[#386859] has-[:checked]:bg-[#e7f3ea]"
+                  className={`flex cursor-pointer items-center gap-3 rounded-md border border-[#d2dfd6] bg-white px-4 py-3 transition has-[:checked]:border-[#386859] has-[:checked]:bg-[#e7f3ea] ${focusRing}`}
                 >
                   <input
                     checked={selectedLenses.includes(lens.id)}
-                    className="h-4 w-4 accent-[#386859]"
+                    className={`h-4 w-4 accent-[#386859] ${focusRing}`}
                     onChange={() => toggleLens(lens.id)}
                     type="checkbox"
                   />
@@ -247,9 +249,9 @@ export default function Home() {
                   </span>
                 </label>
               ))}
-            </div>
+            </fieldset>
 
-            <div className="mt-5 rounded-md border border-[#d2dfd6] bg-[#f0f7f1] p-4 text-sm leading-6 text-[#405349]">
+            <div id="selected-lenses-status" className="mt-5 rounded-md border border-[#d2dfd6] bg-[#f0f7f1] p-4 text-sm leading-6 text-[#405349]" aria-live="polite">
               Select up to three. Selected:{" "}
               <span className="font-semibold">
                 {selectedLenses.length > 0
@@ -261,14 +263,14 @@ export default function Home() {
               type="button"
               disabled={selectedLenses.length === 0}
               onClick={loadResearch}
-              className="mt-5 w-full rounded-md bg-[#245c4d] px-4 py-3 font-semibold text-white transition hover:bg-[#19483c] disabled:cursor-not-allowed disabled:bg-[#9aaca3]"
+              className={`mt-5 w-full rounded-md bg-[#245c4d] px-4 py-3 font-semibold text-white transition hover:bg-[#19483c] disabled:cursor-not-allowed disabled:bg-[#9aaca3] ${focusRing}`}
             >
               {loading ? "Loading cited research…" : "View cited research"}
             </button>
           </section>
         </div>
 
-        {error && <p className="mt-6 max-w-3xl rounded-md bg-[#fff0ed] p-4 text-[#7a3324]">{error}</p>}
+        {error && <p className="mt-6 max-w-3xl rounded-md bg-[#fff0ed] p-4 text-[#7a3324]" role="alert">{error}</p>}
         {showResearch && brief && (
           <section className="mt-6 max-w-3xl rounded-lg border border-[#c3d1c8] bg-white/95 p-5 shadow-sm" aria-live="polite">
             <p className="text-sm font-semibold uppercase tracking-[0.14em] text-[#52685c]">{activeContest.label} research brief</p>
@@ -281,7 +283,9 @@ export default function Home() {
                   <article key={finding.lens_id} className="rounded-md border border-[#ddd2c1] p-4">
                     <div className="flex flex-wrap items-center justify-between gap-2">
                       <h3 className="font-semibold text-[#191815]">{lens?.label ?? finding.lens_id}</h3>
-                      <span className="rounded-full bg-[#edf5ef] px-2 py-1 text-xs font-semibold text-[#405349]">{finding.status}</span>
+                      <span className="rounded-full bg-[#edf5ef] px-2 py-1 text-xs font-semibold text-[#405349]" aria-label={`Status: ${finding.status}`}>
+                        {finding.status}
+                      </span>
                     </div>
                     <p className="mt-3 leading-7 text-[#3f3b35]">{finding.summary?.text ?? finding.explanation}</p>
                     {finding.summary?.citations.map((citation) => {
@@ -289,9 +293,9 @@ export default function Home() {
                       const isReporting = correctionDraft?.citationKey === citationKey;
                       return (
                       <details key={citationKey} className="mt-4 rounded-md bg-[#f7f3eb] p-3">
-                        <summary className="cursor-pointer font-semibold text-[#245c4d]">Inspect source proof</summary>
+                        <summary className={`cursor-pointer rounded-sm font-semibold text-[#245c4d] ${focusRing}`}>Inspect source proof</summary>
                         <p className="mt-2 text-sm text-[#665f54]">{sourceTypeLabels[citation.source_type] ?? citation.source_type} · {citation.locator}</p>
-                        <a className="mt-2 inline-block text-sm font-semibold text-[#245c4d] underline" href={citation.public_source_url} target="_blank" rel="noreferrer">Open original source</a>
+                        <a className={`mt-2 inline-block rounded-sm text-sm font-semibold text-[#245c4d] underline ${focusRing}`} href={citation.public_source_url} target="_blank" rel="noreferrer">Open original source</a>
                         <div className="mt-3 border-t border-[#e1d7c9] pt-3">
                           <button
                             type="button"
@@ -308,7 +312,7 @@ export default function Home() {
                                     },
                               )
                             }
-                            className="text-sm font-semibold text-[#245c4d] underline"
+                            className={`rounded-sm text-sm font-semibold text-[#245c4d] underline ${focusRing}`}
                           >
                             Report an issue with this source
                           </button>
@@ -330,7 +334,7 @@ export default function Home() {
                                       message: null,
                                     })
                                   }
-                                  className="rounded-md border border-[#d1c7b7] bg-white p-2 font-normal"
+                                  className={`rounded-md border border-[#d1c7b7] bg-white p-2 font-normal ${focusRing}`}
                                 >
                                   <option value="misleading_summary">Misleading summary</option>
                                   <option value="incorrect_source">Incorrect source</option>
@@ -351,7 +355,7 @@ export default function Home() {
                                       message: null,
                                     })
                                   }
-                                  className="rounded-md border border-[#d1c7b7] bg-white p-2 font-normal"
+                                  className={`rounded-md border border-[#d1c7b7] bg-white p-2 font-normal ${focusRing}`}
                                   rows={3}
                                   maxLength={1000}
                                   placeholder="Describe the source or claim issue for review"
@@ -364,14 +368,14 @@ export default function Home() {
                                   || correctionDraft.description.trim().length < 10
                                 }
                                 onClick={() => submitCorrection(citation, finding.lens_id)}
-                                className="rounded-md bg-[#245c4d] px-3 py-2 text-sm font-semibold text-white disabled:cursor-not-allowed disabled:bg-[#9aaca3]"
+                                className={`rounded-md bg-[#245c4d] px-3 py-2 text-sm font-semibold text-white disabled:cursor-not-allowed disabled:bg-[#9aaca3] ${focusRing}`}
                               >
                                 {correctionDraft.status === "submitting"
                                   ? "Submitting report..."
                                   : "Submit correction report"}
                               </button>
                               {correctionDraft.message && (
-                                <p className="text-sm font-semibold text-[#405349]">
+                                <p className="text-sm font-semibold text-[#405349]" role={correctionDraft.status === "error" ? "alert" : "status"}>
                                   {correctionDraft.message}
                                 </p>
                               )}
@@ -396,8 +400,8 @@ export default function Home() {
               </ul>
             </section>
             <label className="mt-6 block text-sm font-semibold text-[#25231f]" htmlFor="local-note">Private session note (never sent to BallotSense)</label>
-            <textarea id="local-note" value={note} onChange={(event) => setNote(event.target.value)} className="mt-2 w-full rounded-md border border-[#d1c7b7] p-3" rows={3} placeholder="Write a note for this browser session" />
-            <button type="button" onClick={() => setNote("")} className="mt-2 text-sm font-semibold text-[#245c4d] underline">Clear local note</button>
+            <textarea id="local-note" value={note} onChange={(event) => setNote(event.target.value)} className={`mt-2 w-full rounded-md border border-[#d1c7b7] p-3 ${focusRing}`} rows={3} placeholder="Write a note for this browser session" />
+            <button type="button" onClick={() => setNote("")} className={`mt-2 rounded-sm text-sm font-semibold text-[#245c4d] underline ${focusRing}`}>Clear local note</button>
           </section>
         )}
       </section>
