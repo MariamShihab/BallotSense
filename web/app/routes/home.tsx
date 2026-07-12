@@ -47,6 +47,14 @@ const lenses = [
   },
 ];
 
+const sourceTypeLabels: Record<string, string> = {
+  ballot_argument: "Ballot argument",
+  campaign_material: "Campaign material",
+  candidate_statement: "Candidate statement",
+  elections_office_material: "Official elections material",
+  official_measure_text: "Official measure text",
+};
+
 type Citation = { source_id: string; chunk_id: string; locator: string; public_source_url: string; source_type: string };
 type Finding = { status: string; lens_id: string; summary: { text: string; citations: Citation[]; attribution?: string } | null; explanation: string | null };
 type Brief = { election_id: string; contest_id: string; findings: Finding[]; disclaimer: string };
@@ -59,6 +67,7 @@ export default function Home() {
   const [brief, setBrief] = useState<Brief | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const activeContest = contests.find((contest) => contest.id === (brief?.contest_id ?? selectedContest)) ?? contests[0];
 
   function toggleLens(lens: string) {
     setSelectedLenses((current) =>
@@ -216,7 +225,7 @@ export default function Home() {
         {error && <p className="mt-6 max-w-3xl rounded-md bg-[#fff0ed] p-4 text-[#7a3324]">{error}</p>}
         {showResearch && brief && (
           <section className="mt-6 max-w-3xl rounded-lg border border-[#c3d1c8] bg-white/95 p-5 shadow-sm" aria-live="polite">
-            <p className="text-sm font-semibold uppercase tracking-[0.14em] text-[#52685c]">Measure D research brief</p>
+            <p className="text-sm font-semibold uppercase tracking-[0.14em] text-[#52685c]">{activeContest.label} research brief</p>
             <h2 className="mt-2 text-2xl font-semibold text-[#191815]">What the reviewed material says</h2>
             <p className="mt-2 text-sm leading-6 text-[#665f54]">{brief.disclaimer}</p>
             <div className="mt-5 grid gap-4">
@@ -232,7 +241,7 @@ export default function Home() {
                     {finding.summary?.citations.map((citation) => (
                       <details className="mt-4 rounded-md bg-[#f7f3eb] p-3">
                         <summary className="cursor-pointer font-semibold text-[#245c4d]">Inspect source proof</summary>
-                        <p className="mt-2 text-sm text-[#665f54]">{citation.source_type} · {citation.locator}</p>
+                        <p className="mt-2 text-sm text-[#665f54]">{sourceTypeLabels[citation.source_type] ?? citation.source_type} · {citation.locator}</p>
                         <a className="mt-2 inline-block text-sm font-semibold text-[#245c4d] underline" href={citation.public_source_url} target="_blank" rel="noreferrer">Open original source</a>
                       </details>
                     ))}

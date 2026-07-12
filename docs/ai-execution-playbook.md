@@ -184,6 +184,17 @@ complete, even if related setup work has begun.
       Cloud Run scale limits. Verified the private frontend-to-private-API
       cited brief path through an authenticated local proxy and exercised
       Cloud Run rollback once before restoring the corrected web revision.
+- [x] **6.2, review protocol** Added the Phase 6 demo review plan,
+      accessibility checklist, tester script, comprehension questions, severity
+      definitions, and reusable session log template. Tester sessions have not
+      been run yet.
+- [x] **6.2, internal walkthrough** Ran an AI-assisted internal walkthrough of
+      the private staging demo on 2026-07-12. Verified supported,
+      insufficient-evidence, and not-covered paths; found and fixed a contest
+      heading bug and raw source-type label issue. Deployed and verified the
+      corrected frontend on private staging revision
+      `ballotsense-web-staging-00004-qnx`. This does not replace real tester
+      sessions.
 
 ## Phase 0 — Product decisions and governance
 

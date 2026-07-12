@@ -36,7 +36,7 @@ staging service account.
 - API image:
   `us-west1-docker.pkg.dev/ballotsense-mvp/ballotsense-staging/api:20260712-152fdc8`
 - Current web image:
-  `us-west1-docker.pkg.dev/ballotsense-mvp/ballotsense-staging/web:20260712-152fdc8-web2`
+  `us-west1-docker.pkg.dev/ballotsense-mvp/ballotsense-staging/web:20260712-phase6-review1`
 
 ## Verified behavior
 
@@ -71,13 +71,17 @@ Rollback was exercised once by moving web traffic to
 `ballotsense-web-staging-00002-rhd`, then restoring traffic to the corrected
 revision `ballotsense-web-staging-00003-drr`.
 
+After the Phase 6 internal review, the frontend was updated to
+`ballotsense-web-staging-00004-qnx` with clearer source labels and
+contest-specific brief headings.
+
 Current restore command:
 
 ```sh
 gcloud run services update-traffic ballotsense-web-staging \
   --project=ballotsense-mvp \
   --region=us-west1 \
-  --to-revisions=ballotsense-web-staging-00003-drr=100
+  --to-revisions=ballotsense-web-staging-00004-qnx=100
 ```
 
 ## Budget and logging
