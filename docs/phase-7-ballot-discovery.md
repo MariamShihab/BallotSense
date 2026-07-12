@@ -44,7 +44,11 @@ then, the API returns `provider_not_configured` with manual fallback contests.
 - Web production build passed
 - Playwright + axe accessibility test passed
 
-## Next decision
+## Provider decision
 
-Choose the official address-to-district provider/source for Santa Clara County
-or decide to keep manual contest selection only for the archive demo.
+Approved on 2026-07-12: keep the archive demo manual-only and do not enable
+automated address lookup.
+
+See [Phase 7 provider options](phase-7-provider-options.md). The recommended
+current decision is to keep the archive demo manual-only and link to official
+County ROV lookup pages rather than scraping a browser-facing lookup service.

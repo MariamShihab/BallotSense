@@ -215,6 +215,9 @@ complete, even if related setup work has begun.
       resolver, frontend proxy, optional address-discovery panel, and tests
       proving raw addresses are not retained and extra voter-profile fields are
       rejected. A real geographic provider still requires explicit approval.
+- [x] **7.1, provider decision** Project owner approved keeping the archive
+      demo manual-only on 2026-07-12. Do not automate address lookup for this
+      demo; link to official Santa Clara County ROV lookup services instead.
 
 ## Phase 0 — Product decisions and governance
 
@@ -752,7 +755,8 @@ suite passes.
 
 **Owner:** AI after you authorize an approved geographic source/provider.
 
-1. [ ] Select an address-to-district provider or official jurisdiction source.
+1. [x] Select an address-to-district provider or official jurisdiction source:
+   approved manual-only archive-demo fallback with official ROV outbound links.
 2. [x] Resolve an address only for the live request; do not persist raw address.
 3. [x] Add the inferred-contest response contract with mandatory user
    confirmation; live inference waits for an approved provider.

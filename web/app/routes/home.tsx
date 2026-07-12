@@ -55,28 +55,24 @@ const sourceTypeLabels: Record<string, string> = {
   official_measure_text: "Official measure text",
 };
 
+const officialLookupLinks = [
+  {
+    href: "https://vote.santaclaracounty.gov/look-your-district",
+    label: "Look up your district",
+    detail: "Official Santa Clara County Registrar of Voters district lookup.",
+  },
+  {
+    href: "https://rovservices.sccgov.org/Home/IndexPost?selected=sb&distance=0&navtab=pm&asm=simple&selectedLanguageId=22",
+    label: "View official ballot materials",
+    detail: "Official County ROV service for sample ballot and voter guide materials.",
+  },
+];
+
 const focusRing = "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#245c4d]";
 
 type Citation = { source_id: string; chunk_id: string; locator: string; public_source_url: string; source_type: string };
 type Finding = { status: string; lens_id: string; summary: { text: string; citations: Citation[]; attribution?: string } | null; explanation: string | null };
 type Brief = { election_id: string; contest_id: string; findings: Finding[]; disclaimer: string };
-type ContestSuggestion = {
-  contest_id: string;
-  title: string;
-  contest_type: string;
-  jurisdiction: string;
-  reason: string;
-  confidence: string;
-};
-type AddressResolution = {
-  status: string;
-  provider_name: string;
-  message: string;
-  inferred_contests: ContestSuggestion[];
-  manual_contests: ContestSuggestion[];
-  requires_confirmation: boolean;
-  address_retained: boolean;
-};
 type CorrectionDraft = {
   citationKey: string;
   description: string;
@@ -94,10 +90,6 @@ export default function Home() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [correctionDraft, setCorrectionDraft] = useState<CorrectionDraft | null>(null);
-  const [address, setAddress] = useState("");
-  const [addressLoading, setAddressLoading] = useState(false);
-  const [addressResult, setAddressResult] = useState<AddressResolution | null>(null);
-  const [addressError, setAddressError] = useState<string | null>(null);
   const activeContest = contests.find((contest) => contest.id === (brief?.contest_id ?? selectedContest)) ?? contests[0];
 
   function toggleLens(lens: string) {
@@ -118,28 +110,6 @@ export default function Home() {
     setBrief(null);
     setError(null);
     setCorrectionDraft(null);
-    setAddress("");
-    setAddressResult(null);
-    setAddressError(null);
-  }
-
-  async function resolveAddress() {
-    setAddressLoading(true);
-    setAddressError(null);
-    setAddressResult(null);
-    try {
-      const response = await fetch("/api/v1/ballots/resolve-address", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ election_id: "ca-scc-2026-primary", address }),
-      });
-      if (!response.ok) throw new Error("Address discovery is unavailable right now.");
-      setAddressResult((await response.json()) as AddressResolution);
-    } catch (requestError) {
-      setAddressError(requestError instanceof Error ? requestError.message : "Address discovery is unavailable right now.");
-    } finally {
-      setAddressLoading(false);
-    }
   }
 
   async function loadResearch() {
@@ -240,68 +210,27 @@ export default function Home() {
 
             <div className="mt-5 rounded-md border border-[#e0d4c1] bg-white p-4">
               <h3 className="text-sm font-semibold uppercase tracking-[0.12em] text-[#52685c]">
-                Optional address discovery
+                Official lookup fallback
               </h3>
               <p className="mt-2 text-sm leading-6 text-[#665f54]">
-                Phase 7 will resolve an address only for the live request. The
-                raw address is not stored, and any discovered contest must be
-                confirmed before research starts.
+                Automated address lookup is not enabled for this archive demo.
+                Use the manual contest picker below, or open the official
+                Santa Clara County Registrar of Voters tools in a new tab.
               </p>
-              <label className="mt-3 block text-sm font-semibold text-[#25231f]" htmlFor="address-discovery">
-                Street address for contest discovery
-              </label>
-              <div className="mt-2 flex flex-col gap-2 sm:flex-row">
-                <input
-                  id="address-discovery"
-                  value={address}
-                  onChange={(event) => setAddress(event.target.value)}
-                  className={`min-w-0 flex-1 rounded-md border border-[#d1c7b7] bg-white p-2 text-sm ${focusRing}`}
-                  placeholder="Example: 70 W Hedding St, San Jose, CA"
-                  autoComplete="street-address"
-                />
-                <button
-                  type="button"
-                  disabled={address.trim().length < 5 || addressLoading}
-                  onClick={resolveAddress}
-                  className={`rounded-md border border-[#9c8f7c] px-3 py-2 text-sm font-semibold text-[#453f36] transition hover:bg-[#efe6d7] disabled:cursor-not-allowed disabled:opacity-60 ${focusRing}`}
-                >
-                  {addressLoading ? "Checking…" : "Find contests"}
-                </button>
+              <div className="mt-3 grid gap-2">
+                {officialLookupLinks.map((link) => (
+                  <a
+                    key={link.href}
+                    className={`rounded-md border border-[#d2dfd6] bg-[#f8fff9] px-3 py-2 text-sm text-[#405349] transition hover:bg-[#e7f3ea] ${focusRing}`}
+                    href={link.href}
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    <span className="block font-semibold text-[#245c4d] underline">{link.label}</span>
+                    <span className="mt-1 block leading-5">{link.detail}</span>
+                  </a>
+                ))}
               </div>
-              {addressError && <p className="mt-3 text-sm font-semibold text-[#7a3324]" role="alert">{addressError}</p>}
-              {addressResult && (
-                <div className="mt-3 rounded-md border border-[#d2dfd6] bg-[#f8fff9] p-3 text-sm leading-6 text-[#405349]" role="status">
-                  <p className="font-semibold">{addressResult.message}</p>
-                  <p className="mt-1">
-                    Address retained: <span className="font-semibold">{addressResult.address_retained ? "yes" : "no"}</span>
-                  </p>
-                  {addressResult.inferred_contests.length > 0 && (
-                    <div className="mt-2">
-                      <p className="font-semibold">Confirm a discovered contest:</p>
-                      <div className="mt-2 grid gap-2">
-                        {addressResult.inferred_contests.map((contest) => (
-                          <button
-                            key={contest.contest_id}
-                            type="button"
-                            onClick={() => setSelectedContest(contest.contest_id)}
-                            className={`rounded-md border border-[#386859] bg-white px-3 py-2 text-left font-semibold text-[#245c4d] ${focusRing}`}
-                          >
-                            {contest.title}
-                          </button>
-                        ))}
-                      </div>
-                    </div>
-                  )}
-                  {addressResult.manual_contests.length > 0 && (
-                    <p className="mt-2">
-                      Manual fallback remains available below for{" "}
-                      <span className="font-semibold">
-                        {addressResult.manual_contests.map((contest) => contest.title).join(", ")}
-                      </span>.
-                    </p>
-                  )}
-                </div>
-              )}
             </div>
 
             <fieldset className="mt-5 grid gap-3" aria-labelledby="contest-heading">
