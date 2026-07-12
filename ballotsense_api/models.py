@@ -63,6 +63,7 @@ class SourceDocument(BallotSenseModel):
     published_at: date | None = None
     content_sha256: str = Field(pattern=r"^[a-f0-9]{64}$")
     snapshot_uri: str = Field(pattern=r"^gs://[a-z0-9][a-z0-9._-]{1,220}/.+$")
+    corpus_release_id: str | None = Field(default=None, min_length=1, max_length=160)
     review_status: ReviewStatus
     reviewed_at: datetime | None = None
     reviewer: str | None = Field(default=None, min_length=1, max_length=120)
@@ -189,13 +190,15 @@ class Citation(BallotSenseModel):
     source_id: str = Field(pattern=r"^[a-z0-9][a-z0-9_-]{2,127}$")
     chunk_id: str = Field(pattern=r"^[a-z0-9][a-z0-9_-]{2,127}$")
     locator: str = Field(min_length=1, max_length=240)
+    public_source_url: HttpUrl
+    source_type: SourceType
 
 
 class CitedClaim(BallotSenseModel):
     """A claim eligible for display in the voter-facing application."""
 
-    text: str = Field(min_length=1, max_length=1_500)
-    citations: list[Citation] = Field(min_length=1)
+    text: str = Field(min_length=1, max_length=10_000)
+    citations: list[Citation] = Field(min_length=1, max_length=4)
     attribution: str | None = Field(default=None, max_length=240)
 
 
@@ -277,8 +280,21 @@ class BriefRequest(BallotSenseModel):
 class BriefResponse(BallotSenseModel):
     election_id: str = Field(pattern=r"^[a-z0-9][a-z0-9_-]{2,127}$")
     contest_id: str = Field(pattern=r"^[a-z0-9][a-z0-9_-]{2,127}$")
-    findings: list[EvidenceFinding] = Field(min_length=1)
+    findings: list[EvidenceFinding] = Field(min_length=1, max_length=4)
     disclaimer: str = Field(min_length=1, max_length=500)
+
+
+class ClaimAuditRecord(BallotSenseModel):
+    """Redacted operational record for a generated brief, never voter data."""
+
+    id: str = Field(pattern=r"^[a-f0-9-]{36}$")
+    created_at: datetime
+    corpus_version: str = Field(min_length=1, max_length=160)
+    election_id: str = Field(pattern=r"^[a-z0-9][a-z0-9_-]{2,127}$")
+    contest_id: str = Field(pattern=r"^[a-z0-9][a-z0-9_-]{2,127}$")
+    lens_ids: list[str] = Field(min_length=1, max_length=4)
+    chunk_ids: list[str] = Field(max_length=12)
+    validator_outcome: str = Field(min_length=1, max_length=120)
 
 
 class CorrectionReport(BallotSenseModel):

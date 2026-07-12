@@ -226,6 +226,8 @@ def test_insufficient_evidence_cannot_hide_an_uncited_claim() -> None:
                         "source_id": "source-one",
                         "chunk_id": "chunk-one",
                         "locator": "p. 1",
+                        "public_source_url": "https://example.gov/source-one.pdf",
+                        "source_type": "elections_office_material",
                     }
                 ],
             ),
@@ -240,6 +242,8 @@ def test_brief_response_rejects_numeric_match_scores_and_recommendations() -> No
                 "source_id": "measure-d-analysis",
                 "chunk_id": "measure-d-analysis-p1",
                 "locator": "p. 1",
+                "public_source_url": "https://example.gov/measure-d-analysis.pdf",
+                "source_type": "elections_office_material",
             }
         ],
     )

@@ -139,8 +139,43 @@ complete, even if related setup work has begun.
       `RETRIEVAL_QUERY`. Firestore vector retrieval must use cosine distance.
 - [x] **3.3, first embedding run** Vertex AI created 768-dimensional document
       vectors for the six approved Measure D chunks in run
-      `embed-402d6c32-f875-4aed-84e0-d086b5152b81`. The Firestore vector index
-      is provisioning; no retrieval query has been issued.
+      `embed-402d6c32-f875-4aed-84e0-d086b5152b81`.
+- [x] **3.4, retrieval verification** The four-filter Firestore cosine vector
+      index is ready. A live Measure D climate/environment query returned only
+      three approved, locator-bound Measure D chunks; the same query scoped to
+      Board of Supervisors District 1 returned `insufficient_evidence` with no
+      chunks.
+- [x] **4.1–4.2, cited-generation foundation** Added bounded brief and citation
+      contracts, then authorized Vertex AI `gemini-2.5-flash` for this task. A
+      development-only Measure D climate/environment brief was generated from
+      the retrieved evidence packet and passed validation; no voter data was
+      sent or stored.
+- [x] **4.3, core validation** Added deterministic validation that blocks
+      fabricated or mismatched citations, wrong-contest output, and
+      recommendation/ranking language; it returns an evidence-gap fallback
+      instead of an unsupported claim.
+- [x] **4.3, audit and API** Added the validated `POST /v1/briefs` endpoint,
+      one corrective retry, and a durable Firestore `claim_audits` record with
+      only corpus version, election/contest/lens IDs, chunk IDs, timestamp, and
+      validator outcome. The endpoint is not connected to the voter UI.
+- [x] **4.4, evaluation foundation** Added the fixed Measure D acceptance set,
+      reviewer rubric, and automated checks for evidence gaps, un-ingested
+      contests, fabricated citations, wrong-contest citations, uncited claims,
+      recommendation language, and party-based inference.
+- [x] **4.4, human approval** Project owner approved the fixed Phase 4
+      evaluation set against corpus release `measure-d-review-2026-07-12` on
+      2026-07-12. Phase 5 UI work may begin.
+- [x] **5.1, screens 1–2** Updated the mobile-first shell with the welcome and
+      trust framing, browser-memory privacy promise, three-step flow, and
+      bounded issue-lens selection (up to three lenses, no free text).
+- [x] **5.1, cited brief connection** Connected the research action to the
+      validated brief API using only canonical election, contest, and lens IDs.
+      The UI renders returned citations or explicit evidence gaps; private notes
+      are never included in the API request.
+- [x] **5.1–5.3, Measure D UI and approval** Added the cited brief, coverage,
+      citation-detail, and local-note screens. Project owner verified the
+      mobile flow and source-proof opening on 2026-07-12; local notes remain
+      outside API requests.
 
 ## Phase 0 — Product decisions and governance
 
@@ -553,11 +588,11 @@ use secret values without explicit authorization.
 
 ### Phase 4 acceptance checklist
 
-- [ ] Every factual claim in the demo response has valid evidence.
-- [ ] Invalid output is blocked from the UI.
-- [ ] No-answer cases return an honest evidence-gap state.
-- [ ] Human review finds no unsupported claim in the acceptance set.
-- [ ] Generated responses do not rank or recommend choices.
+- [x] Every factual claim in the demo response has valid evidence.
+- [x] Invalid output is blocked from the UI.
+- [x] No-answer cases return an honest evidence-gap state.
+- [x] Human review finds no unsupported claim in the acceptance set.
+- [x] Generated responses do not rank or recommend choices.
 
 **Stop point:** Do not connect model output to a voter UI until the acceptance
 suite passes.
