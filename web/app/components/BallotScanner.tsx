@@ -53,7 +53,7 @@ export function BallotScanner({ focusRing, onConfirmProp36 }: BallotScannerProps
   function confirmProp36() {
     setStatus("confirmed");
     setMessage(
-      "Confirmed: Proposition 36. The Prop 36 corpus is still pending reviewer approval, so cited answers remain gated.",
+      "Confirmed: Proposition 36. Its reviewed corpus is embedded; select issue lenses and inspect the cited research.",
     );
     onConfirmProp36();
   }

@@ -238,17 +238,16 @@ export default function Home() {
               Archived 2024 Prop 36 build
             </p>
             <p className="rounded-full bg-[#fff6df] px-3 py-1 text-xs font-semibold uppercase tracking-[0.14em] text-[#6c5628]">
-              Scanner UI · review-gated corpus
+              Scanner UI · embedded corpus
             </p>
           </div>
           <h1 className="mt-4 font-serif text-5xl font-bold leading-[0.98] text-[#191815] sm:text-7xl">
             BallotSense shows its work before it speaks.
           </h1>
           <p className="mt-6 max-w-2xl text-lg leading-8 text-[#3f3b35]">
-            BallotSense is pivoting to an archived California November 2024
-            Proposition 36 demo corpus. The scanner starts as a privacy-safe
-            capture and confirmation flow while the source chunks stay
-            review-gated.
+            BallotSense is using an archived California November 2024 Proposition 36
+            demo corpus. The scanner is a privacy-safe capture and confirmation flow,
+            and cited research comes from the reviewed embedded corpus.
           </p>
           <ol className="mt-7 flex flex-wrap gap-3 text-sm font-semibold text-[#405349]">
             <li className="rounded-full bg-[#e7f3ea] px-3 py-1">1. Choose a contest</li>
