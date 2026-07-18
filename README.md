@@ -241,6 +241,7 @@ make check-november-sources
 - [Phase 8 statewide measure inventory](docs/phase-8-statewide-measure-inventory.md)
 - [Phase 8 source readiness check](docs/phase-8-source-readiness-2026-07-12.md)
 - [Phase 8 archive demo polish pass](docs/phase-8-archive-demo-polish.md)
+- [Demo readiness checklist](docs/demo-readiness-checklist.md)
 - [MVP decision packet](docs/mvp-decision-packet.md)
 - [Sequential execution plan](docs/execution-plan.md)
 

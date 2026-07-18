@@ -244,6 +244,9 @@ complete, even if related setup work has begun.
       November sources are unpublished: clearer scope labels, a how-it-works
       section, omitted-feature callouts, stronger insufficient-evidence states,
       and clearer source-proof affordances.
+- [x] **8.1, demo readiness checklist** Added a pre-demo checklist for CI,
+      GitHub README rendering, local UI walkthrough, source proof, abstention,
+      correction reports, privacy copy, and November source readiness.
 
 ## Phase 0 — Product decisions and governance
 
