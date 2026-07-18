@@ -29,17 +29,47 @@ from .models import (
 from .repository import SourceRepository
 from .retrieval import FirestoreRetriever, VertexQueryEmbedder
 
-LENS_QUERIES: dict[str, str] = {
-    "housing-affordability": (
-        "What reviewed evidence relates to housing affordability or property costs?"
-    ),
-    "public-safety": "What reviewed evidence relates to public safety or wildfire risk?",
-    "climate-environment": (
-        "What does Measure D say about protecting open space and natural resources?"
-    ),
+DEFAULT_LENS_QUERIES: dict[str, str] = {
+    "housing-affordability": "What reviewed evidence relates to housing affordability or costs?",
+    "public-safety": "What reviewed evidence relates to public safety?",
+    "climate-environment": "What reviewed evidence relates to climate or the environment?",
     "public-education": "What reviewed evidence relates to public education or schools?",
 }
+CONTEST_LENS_QUERIES: dict[str, dict[str, str]] = {
+    "scvosa-measure-d": {
+        "housing-affordability": (
+            "What reviewed evidence relates to housing affordability or property costs?"
+        ),
+        "public-safety": "What reviewed evidence relates to public safety or wildfire risk?",
+        "climate-environment": (
+            "What does Measure D say about protecting open space and natural resources?"
+        ),
+        "public-education": "What reviewed evidence relates to public education or schools?",
+    },
+    "ca-prop-36-2024": {
+        "housing-affordability": (
+            "What reviewed evidence relates to Proposition 36 and housing affordability?"
+        ),
+        "public-safety": (
+            "What does Proposition 36 change about theft crimes, drug crimes, fentanyl, "
+            "treatment, and criminal penalties?"
+        ),
+        "climate-environment": (
+            "What reviewed evidence relates to Proposition 36 and climate or the environment?"
+        ),
+        "public-education": (
+            "What reviewed evidence relates to Proposition 36, K-12 schools, school funding, "
+            "or truancy and dropout prevention?"
+        ),
+    },
+}
 CORPUS_VERSION = "measure-d-approved-corpus-v1"
+
+
+def lens_query(contest_id: str, lens_id: str) -> str:
+    return CONTEST_LENS_QUERIES.get(contest_id, {}).get(
+        lens_id, DEFAULT_LENS_QUERIES.get(lens_id, "What reviewed evidence is available?")
+    )
 
 
 class ClaimAuditRepository:
@@ -106,7 +136,7 @@ class BriefService:
                     election_id=request.election_id,
                     contest_id=request.contest_id,
                     lens_id=lens_id,
-                    query_text=LENS_QUERIES.get(lens_id, "What reviewed evidence is available?"),
+                    query_text=lens_query(request.contest_id, lens_id),
                     limit=3,
                 )
             )
@@ -184,9 +214,19 @@ class BriefService:
     def _verified_excerpt(packet: EvidencePacket) -> EvidenceFinding:
         """Display an exact reviewed excerpt when generated prose is unsafe."""
 
-        chunk = next(
-            (item for item in packet.chunks if item.source_tier == 1), packet.chunks[0]
-        )
+        source_type_priority = {
+            "state_voter_guide": 0,
+            "elections_office_material": 1,
+            "official_measure_text": 2,
+            "ballot_argument": 3,
+        }
+        chunk = sorted(
+            packet.chunks,
+            key=lambda item: (
+                source_type_priority.get(str(item.source_type), 9),
+                item.source_tier,
+            ),
+        )[0]
         attribution = None if chunk.source_tier == 1 else f"Attributed {chunk.source_type}"
         return EvidenceFinding(
             status="supported",

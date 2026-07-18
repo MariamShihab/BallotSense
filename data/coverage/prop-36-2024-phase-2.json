@@ -18,5 +18,7 @@
   "deliberate_gap": "Until review is complete, every voter-facing Prop 36 query must abstain or show pending-review status.",
   "reviewed_at": "2026-07-18T22:44:17Z",
   "reviewer": "Project owner (user)",
-  "approved_chunk_candidate_count": 17
+  "approved_chunk_candidate_count": 17,
+  "logical_source_count": 7,
+  "logical_source_policy": "One master PDF hash anchors seven logical source records so neutral analysis, ballot arguments, rebuttals, and measure text retain correct source labels."
 }

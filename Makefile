@@ -1,4 +1,4 @@
-.PHONY: api-dev api-format api-lint api-test web-dev web-check check check-november-sources snapshot-prop36-source prepare-prop36-review promote-prop36-review
+.PHONY: api-dev api-format api-lint api-test web-dev web-check check check-november-sources snapshot-prop36-source prepare-prop36-review promote-prop36-review ingest-prop36 embed-prop36
 
 PYTHON ?= .venv/bin/python
 NPM ?= npm
@@ -34,3 +34,9 @@ prepare-prop36-review:
 
 promote-prop36-review:
 	$(PYTHON) scripts/promote_review_packet.py --packet data/review_packets/prop-36-2024.json --output data/corpus/prop-36-2024-approved-chunks.json
+
+ingest-prop36:
+	$(PYTHON) scripts/ingest_approved_corpus.py --project $(BALLOTSENSE_GCP_PROJECT) --corpus prop-36-2024
+
+embed-prop36:
+	$(PYTHON) scripts/embed_approved_corpus.py --project $(BALLOTSENSE_GCP_PROJECT) --corpus-release prop-36-review-2026-07-18

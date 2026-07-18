@@ -16,7 +16,7 @@ from google.genai import types
 EMBEDDING_MODEL = "gemini-embedding-001"
 EMBEDDING_DIMENSION = 768
 VERTEX_LOCATION = "global"
-CORPUS_RELEASE_ID = "measure-d-review-2026-07-12"
+DEFAULT_CORPUS_RELEASE_ID = "measure-d-review-2026-07-12"
 
 
 def embedding_client(project_id: str) -> genai.Client:
@@ -44,13 +44,14 @@ def document_embedding(client: genai.Client, text: str) -> list[float]:
     return values
 
 
-def embed(project_id: str) -> str:
+def embed(project_id: str, corpus_release_id: str) -> str:
     firestore_client = firestore.Client(project=project_id)
     vertex_client = embedding_client(project_id)
     query = (
         firestore_client.collection("source_chunks")
         .where(filter=FieldFilter("review_status", "==", "approved"))
         .where(filter=FieldFilter("approved_for_retrieval", "==", True))
+        .where(filter=FieldFilter("corpus_release_id", "==", corpus_release_id))
     )
     snapshots = list(query.stream())
     run_id = f"embed-{uuid4()}"
@@ -85,7 +86,7 @@ def embed(project_id: str) -> str:
             "started_at": completed_at,
             "completed_at": completed_at,
             "status": "succeeded",
-            "corpus_release_id": CORPUS_RELEASE_ID,
+            "corpus_release_id": corpus_release_id,
             "chunk_ids": sorted(chunk_ids),
             "embedding_model": EMBEDDING_MODEL,
             "embedding_dimension": EMBEDDING_DIMENSION,
@@ -99,8 +100,9 @@ def embed(project_id: str) -> str:
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--project", required=True)
+    parser.add_argument("--corpus-release", default=DEFAULT_CORPUS_RELEASE_ID)
     args = parser.parse_args()
-    print(embed(args.project))
+    print(embed(args.project, args.corpus_release))
 
 
 if __name__ == "__main__":

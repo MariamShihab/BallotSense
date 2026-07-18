@@ -34,6 +34,57 @@ from scripts.snapshot_prop36_master_pdf import (  # noqa: E402
 OUTPUT_PATH = ROOT / "data/review_packets/prop-36-2024.json"
 SOURCE_RECORD_PATH = ROOT / "data/source_records/prop-36-2024.json"
 SOURCE_CANDIDATE_PATH = ROOT / "data/source_candidates/prop-36-2024.json"
+SOURCE_DEFINITIONS = {
+    "ca-2024-vig-prop36-title-summary": {
+        "title": "California Voter Guide Proposition 36 Title and Summary",
+        "source_type": "state_voter_guide",
+        "source_tier": 1,
+        "document_role": "official title, summary, and fiscal summary",
+        "attribution_note": "Tier 1 state voter guide material prepared by the Attorney General.",
+    },
+    "ca-2024-vig-prop36-lao-analysis": {
+        "title": "California Voter Guide Proposition 36 Legislative Analyst Analysis",
+        "source_type": "state_voter_guide",
+        "source_tier": 1,
+        "document_role": "Legislative Analyst impartial analysis",
+        "attribution_note": "Tier 1 state voter guide material prepared by the Legislative Analyst.",
+    },
+    "ca-2024-vig-prop36-argument-in-favor": {
+        "title": "California Voter Guide Proposition 36 Argument in Favor",
+        "source_type": "ballot_argument",
+        "source_tier": 2,
+        "document_role": "official voter guide argument in favor",
+        "attribution_note": "Tier 2 attributed ballot argument; do not present as neutral fact.",
+    },
+    "ca-2024-vig-prop36-rebuttal-to-favor": {
+        "title": "California Voter Guide Proposition 36 Rebuttal to Argument in Favor",
+        "source_type": "ballot_argument",
+        "source_tier": 2,
+        "document_role": "official voter guide rebuttal to argument in favor",
+        "attribution_note": "Tier 2 attributed ballot rebuttal; do not present as neutral fact.",
+    },
+    "ca-2024-vig-prop36-argument-against": {
+        "title": "California Voter Guide Proposition 36 Argument Against",
+        "source_type": "ballot_argument",
+        "source_tier": 2,
+        "document_role": "official voter guide argument against",
+        "attribution_note": "Tier 2 attributed ballot argument; do not present as neutral fact.",
+    },
+    "ca-2024-vig-prop36-rebuttal-to-against": {
+        "title": "California Voter Guide Proposition 36 Rebuttal to Argument Against",
+        "source_type": "ballot_argument",
+        "source_tier": 2,
+        "document_role": "official voter guide rebuttal to argument against",
+        "attribution_note": "Tier 2 attributed ballot rebuttal; do not present as neutral fact.",
+    },
+    "ca-2024-vig-prop36-text": {
+        "title": "California Voter Guide Proposition 36 Text of Proposed Laws",
+        "source_type": "official_measure_text",
+        "source_tier": 1,
+        "document_role": "official measure text",
+        "attribution_note": "Tier 1 official measure text from the state voter guide.",
+    },
+}
 PAGE_RANGES = {
     "title-summary-analysis-arguments": range(58, 64),
     "full-text": range(126, 135),
@@ -106,6 +157,7 @@ def slice_from(text: str, start: str, *, end: str | None = None) -> str:
 def make_candidate(
     *,
     chunk_id: str,
+    source_id: str,
     text: str,
     locator: str,
     reviewer_note: str,
@@ -113,7 +165,7 @@ def make_candidate(
 ) -> dict:
     candidate = SourceChunkCandidate(
         id=chunk_id,
-        source_id=SOURCE_ID,
+        source_id=source_id,
         election_id=ELECTION_ID,
         contest_id=CONTEST_ID,
         text=text,
@@ -136,6 +188,7 @@ def build_candidate_chunks(extracted_pages: dict[int, str]) -> list[dict]:
     chunks: list[dict] = [
         make_candidate(
             chunk_id="ca-prop-36-2024-title-summary",
+            source_id="ca-2024-vig-prop36-title-summary",
             text=slice_from(page_58, "PROPOSITION ALLOWS", end="ANALYSIS BY"),
             locator="Official VIG PDF p. 58, title and summary",
             status=ExtractionStatus.READY_FOR_REVIEW,
@@ -146,6 +199,7 @@ def build_candidate_chunks(extracted_pages: dict[int, str]) -> list[dict]:
         ),
         make_candidate(
             chunk_id="ca-prop-36-2024-lao-background",
+            source_id="ca-2024-vig-prop36-lao-analysis",
             text=clean_text(
                 slice_from(page_58, "ANALYSIS BY")
                 + "\n\n"
@@ -159,6 +213,7 @@ def build_candidate_chunks(extracted_pages: dict[int, str]) -> list[dict]:
         ),
         make_candidate(
             chunk_id="ca-prop-36-2024-lao-proposal",
+            source_id="ca-2024-vig-prop36-lao-analysis",
             text=clean_text(
                 slice_from(page_59, "PROPOSAL")
                 + "\n\n"
@@ -172,6 +227,7 @@ def build_candidate_chunks(extracted_pages: dict[int, str]) -> list[dict]:
         ),
         make_candidate(
             chunk_id="ca-prop-36-2024-lao-fiscal-effects",
+            source_id="ca-2024-vig-prop36-lao-analysis",
             text=clean_text(
                 slice_from(page_60, "FISCAL EFFECTS")
                 + "\n\n"
@@ -185,6 +241,7 @@ def build_candidate_chunks(extracted_pages: dict[int, str]) -> list[dict]:
         ),
         make_candidate(
             chunk_id="ca-prop-36-2024-argument-in-favor",
+            source_id="ca-2024-vig-prop36-argument-in-favor",
             text=slice_from(
                 page_62,
                 "★  ARGUMENT IN FAVOR OF PROPOSITION 36",
@@ -198,6 +255,7 @@ def build_candidate_chunks(extracted_pages: dict[int, str]) -> list[dict]:
         ),
         make_candidate(
             chunk_id="ca-prop-36-2024-rebuttal-to-favor",
+            source_id="ca-2024-vig-prop36-rebuttal-to-favor",
             text=slice_from(
                 page_62,
                 "★  REBUTTAL TO ARGUMENT IN FAVOR OF PROPOSITION 36",
@@ -211,6 +269,7 @@ def build_candidate_chunks(extracted_pages: dict[int, str]) -> list[dict]:
         ),
         make_candidate(
             chunk_id="ca-prop-36-2024-argument-against",
+            source_id="ca-2024-vig-prop36-argument-against",
             text=slice_from(
                 page_63,
                 "★  ARGUMENT AGAINST PROPOSITION 36",
@@ -224,6 +283,7 @@ def build_candidate_chunks(extracted_pages: dict[int, str]) -> list[dict]:
         ),
         make_candidate(
             chunk_id="ca-prop-36-2024-rebuttal-to-against",
+            source_id="ca-2024-vig-prop36-rebuttal-to-against",
             text=slice_from(
                 page_63,
                 "★  REBUTTAL TO ARGUMENT AGAINST PROPOSITION 36",
@@ -244,6 +304,7 @@ def build_candidate_chunks(extracted_pages: dict[int, str]) -> list[dict]:
         chunks.append(
             make_candidate(
                 chunk_id=f"ca-prop-36-2024-text-p{page_number:03d}",
+                source_id="ca-2024-vig-prop36-text",
                 text=text,
                 locator=f"Official VIG PDF p. {page_number}, text of proposed laws",
                 reviewer_note=(
@@ -262,37 +323,33 @@ def write_source_candidate(manifest: dict) -> None:
         "contest_id": CONTEST_ID,
         "jurisdiction": "California",
         "reviewer": "Project owner (user)",
+        "master_source_id": SOURCE_ID,
         "sources": [
             {
-                "id": SOURCE_ID,
-                "title": manifest["title"],
+                "id": source_id,
+                "title": definition["title"],
                 "canonical_url": manifest["canonical_url"],
                 "publisher": manifest["publisher"],
-                "expected_source_type": "state_voter_guide",
-                "source_tier": 1,
+                "expected_source_type": definition["source_type"],
+                "source_tier": definition["source_tier"],
                 "election_id": ELECTION_ID,
                 "jurisdiction": "California",
                 "contest_id": CONTEST_ID,
-                "document_role": (
-                    "official Prop 36 title, summary, Legislative Analyst analysis, "
-                    "arguments, rebuttals, and measure text"
-                ),
-                "artifact_kind": "PDF",
+                "document_role": definition["document_role"],
+                "artifact_kind": "PDF section",
                 "has_stable_locator": True,
                 "inclusion_reason": (
-                    "The California Secretary of State official voter guide is the primary "
-                    "neutral government source for statewide Proposition 36."
+                    "This logical source section is anchored to the complete California "
+                    "Secretary of State voter guide PDF snapshot and hash."
                 ),
-                "attribution_note": (
-                    "Tier 1 state voter guide. Ballot arguments inside the guide must still "
-                    "be attributed to their named proponents/opponents."
-                ),
+                "attribution_note": definition["attribution_note"],
                 "retrieved_at": manifest["retrieved_at"],
                 "published_at": None,
                 "status": "pending_review",
                 "reviewer": "Project owner (user)",
                 "review_note": "Pending reviewer comparison against the master PDF snapshot.",
             }
+            for source_id, definition in SOURCE_DEFINITIONS.items()
         ],
         "known_gap": (
             "This packet uses the complete official guide as one master source. "
@@ -307,14 +364,15 @@ def write_source_record(manifest: dict) -> None:
         "election_id": ELECTION_ID,
         "contest_id": CONTEST_ID,
         "retrieval_batch_at": manifest["retrieved_at"],
+        "master_source_id": SOURCE_ID,
         "sources": [
             {
-                "id": SOURCE_ID,
-                "title": manifest["title"],
+                "id": source_id,
+                "title": definition["title"],
                 "canonical_url": manifest["canonical_url"],
                 "publisher": manifest["publisher"],
-                "source_type": "state_voter_guide",
-                "source_tier": 1,
+                "source_type": definition["source_type"],
+                "source_tier": definition["source_tier"],
                 "election_id": ELECTION_ID,
                 "jurisdiction": "California",
                 "contest_id": CONTEST_ID,
@@ -327,6 +385,7 @@ def write_source_record(manifest: dict) -> None:
                 "reviewed_at": None,
                 "reviewer": "Project owner (user)",
             }
+            for source_id, definition in SOURCE_DEFINITIONS.items()
         ],
     }
     SOURCE_RECORD_PATH.write_text(json.dumps(record, indent=2) + "\n")

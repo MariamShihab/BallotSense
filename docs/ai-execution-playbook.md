@@ -268,6 +268,19 @@ complete, even if related setup work has begun.
       36 review packet on 2026-07-18. Promoted it to
       `data/corpus/prop-36-2024-approved-chunks.json`; embeddings remain
       intentionally absent until the ingestion/embedding step.
+- [x] **Prop 36 source-label correction** Split the Prop 36 corpus into seven
+      logical source records that share the same master PDF hash, preserving
+      neutral state-voter-guide, attributed ballot-argument, and official
+      measure-text labels during retrieval.
+- [x] **Prop 36 Firestore ingestion** Uploaded the official 2024 voter guide PDF
+      snapshot to the private source bucket, then ingested seven approved Prop
+      36 source records and 17 approved chunks to development Firestore in run
+      `ingest-aba9f036-d169-4452-b9f2-4d17773e91ce`.
+- [x] **Prop 36 embeddings** Generated 768-dimensional
+      `gemini-embedding-001` document vectors for the approved Prop 36 corpus
+      in run `embed-93973b1e-4ebc-46ce-a61b-600e280cb366`. A live
+      public-safety retrieval returned approved Prop 36 chunks with correct
+      source labels.
 - [x] **Prop 36 Phase 3, scanner UI shell** Added a browser-memory-only ballot
       scanner prototype for unmarked ballot/sample-ballot images. It does not
       upload images, run OCR, store photos, infer vote choices, or unlock cited
@@ -556,8 +569,8 @@ master authenticity anchor.
 6. [x] Keep the review packet pending until the reviewer explicitly approves it.
 7. [x] Record reviewer approval and promote the approved chunks to `data/corpus`.
 8. [x] Refuse embeddings until the approved corpus file exists.
-9. [ ] Ingest the approved Prop 36 corpus into development Firestore.
-10. [ ] Generate embeddings for the approved Prop 36 chunks.
+9. [x] Ingest the approved Prop 36 corpus into development Firestore.
+10. [x] Generate embeddings for the approved Prop 36 chunks.
 
 ## Phase 3 — Firestore and retrieval
 

@@ -15,13 +15,15 @@ export function meta({}: Route.MetaArgs) {
 const contests = [
   {
     id: "ca-prop-36-2024",
+    electionId: "ca-general-2024-11-05",
     label: "Proposition 36",
     detail: "California November 2024 drug and theft crimes measure",
-    status: "Corpus pending reviewer approval",
-    enabled: false,
+    status: "Available in Prop 36 archive demo",
+    enabled: true,
   },
   {
     id: "scvosa-measure-d",
+    electionId: "ca-scc-2026-primary",
     label: "Measure D",
     detail: "Santa Clara Valley Open Space Authority special parcel tax",
     status: "Available in archive demo",
@@ -29,6 +31,7 @@ const contests = [
   },
   {
     id: "scc-bos-district-1",
+    electionId: "ca-scc-2026-primary",
     label: "Board of Supervisors, District 1",
     detail: "Future candidate-race corpus; not included in this reviewed archive demo.",
     status: "Not covered yet",
@@ -66,6 +69,7 @@ const sourceTypeLabels: Record<string, string> = {
   campaign_material: "Campaign material",
   candidate_statement: "Candidate statement",
   elections_office_material: "Official elections material",
+  state_voter_guide: "State voter guide",
   official_measure_text: "Official measure text",
 };
 
@@ -93,7 +97,7 @@ const processSteps = [
   },
   {
     title: "Lens-specific retrieval",
-    detail: "The demo checks your selected lenses against the reviewed Measure D archive corpus.",
+    detail: "The demo checks your selected lenses against the selected reviewed archive corpus.",
   },
   {
     title: "Cited or abstained",
@@ -129,7 +133,21 @@ export default function Home() {
   const [correctionDraft, setCorrectionDraft] = useState<CorrectionDraft | null>(null);
   const [scannerNotice, setScannerNotice] = useState<string | null>(null);
   const activeContest = contests.find((contest) => contest.id === (brief?.contest_id ?? selectedContest)) ?? contests[0];
+  const selectedContestRecord = contests.find((contest) => contest.id === selectedContest);
   const canLoadResearch = selectedLenses.length > 0 && contests.find((contest) => contest.id === selectedContest)?.enabled;
+  const coverageItems = activeContest.id === "ca-prop-36-2024"
+    ? [
+        ["State voter guide", "title and summary, LAO analysis, and fiscal effects are available."],
+        ["Ballot arguments", "argument and rebuttal material is available and clearly attributed."],
+        ["Official measure text", "text of proposed laws is available from VIG pages 126–134."],
+        ["Evidence gaps", "unrelated lenses should still abstain when no reviewed evidence supports them."],
+      ]
+    : [
+        ["Official election material", "available for Measure D."],
+        ["Filed ballot arguments and rebuttals", "available and clearly attributed."],
+        ["Public education", "no verified Measure D evidence found."],
+        ["District 1 candidate race", "not covered yet; no reviewed candidate corpus has been added."],
+      ];
 
   function toggleLens(lens: string) {
     setSelectedLenses((current) =>
@@ -160,7 +178,11 @@ export default function Home() {
       const response = await fetch("/api/v1/briefs", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ election_id: "ca-scc-2026-primary", contest_id: selectedContest, lens_ids: selectedLenses }),
+        body: JSON.stringify({
+          election_id: selectedContestRecord?.electionId ?? "ca-general-2024-11-05",
+          contest_id: selectedContest,
+          lens_ids: selectedLenses,
+        }),
       });
       if (!response.ok) throw new Error("The cited brief is unavailable right now.");
       setBrief((await response.json()) as Brief);
@@ -244,7 +266,7 @@ export default function Home() {
               setBrief(null);
               setError(null);
               setScannerNotice(
-                "Proposition 36 is confirmed, but its source chunks are still pending reviewer approval. Cited research unlocks only after approval and embedding.",
+                "Proposition 36 is confirmed. Its reviewed corpus is embedded, so you can inspect cited research after selecting issue lenses.",
               );
             }}
           />
@@ -560,10 +582,9 @@ export default function Home() {
               <h3 id="coverage-heading" className="font-semibold text-[#191815]">Evidence coverage</h3>
               <p className="mt-1 text-sm leading-6 text-[#53675b]">Coverage describes what is in this reviewed archive corpus, not a position or endorsement.</p>
               <ul className="mt-3 grid gap-2 text-sm leading-6 text-[#3f3b35]">
-                <li><span className="font-semibold">Official election material:</span> available for Measure D.</li>
-                <li><span className="font-semibold">Filed ballot arguments and rebuttals:</span> available and clearly attributed.</li>
-                <li><span className="font-semibold">Public education:</span> no verified Measure D evidence found.</li>
-                <li><span className="font-semibold">District 1 candidate race:</span> not covered yet; no reviewed candidate corpus has been added.</li>
+                {coverageItems.map(([label, detail]) => (
+                  <li key={label}><span className="font-semibold">{label}:</span> {detail}</li>
+                ))}
               </ul>
             </section>
             <label className="mt-6 block text-sm font-semibold text-[#25231f]" htmlFor="local-note">Private session note (never sent to BallotSense)</label>
