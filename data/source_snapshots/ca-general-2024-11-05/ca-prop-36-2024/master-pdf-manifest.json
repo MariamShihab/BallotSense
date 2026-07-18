@@ -1,0 +1,29 @@
+{
+  "election_id": "ca-general-2024-11-05",
+  "contest_id": "ca-prop-36-2024",
+  "source_id": "ca-2024-vig-complete",
+  "title": "California Official Voter Information Guide, November 5, 2024 General Election",
+  "publisher": "California Secretary of State",
+  "canonical_url": "https://vig.cdn.sos.ca.gov/2024/general/pdf/complete-vig.pdf",
+  "source_type": "state_voter_guide",
+  "source_tier": 1,
+  "artifact_kind": "complete official voter guide PDF",
+  "retrieved_at": "2026-07-18T22:19:11.284191Z",
+  "content_sha256": "4f7fef63bddb5c60aaabda673b57ae4375105ce941d2ff9dc9d7136aee7e4ef4",
+  "size_bytes": 5048980,
+  "local_snapshot_path": "data/source_snapshots/ca-general-2024-11-05/ca-prop-36-2024/complete-vig.pdf",
+  "git_tracks_pdf": false,
+  "planned_snapshot_uri": "gs://ballotsense-mvp-source-snapshots/ca-general-2024-11-05/ca-prop-36-2024/ca-2024-vig-complete/4f7fef63bddb5c60aaabda673b57ae4375105ce941d2ff9dc9d7136aee7e4ef4.pdf",
+  "page_scope": {
+    "title_summary_analysis_arguments": "Official VIG PDF pages 58-63; verify during review.",
+    "full_text": "Official VIG PDF pages 126-134; verify during review."
+  },
+  "review_status": "pending",
+  "reviewer": "Project owner (user)",
+  "notes": [
+    "This complete PDF hash is the primary authenticity anchor.",
+    "Later chunks must cite this source_id and a stable page locator.",
+    "No generated summaries may be stored as chunks.",
+    "No embeddings may be generated until a reviewer approves extracted chunks."
+  ]
+}

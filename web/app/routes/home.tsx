@@ -1,5 +1,6 @@
 import type { Route } from "./+types/home";
 import { useState } from "react";
+import { BallotScanner } from "~/components/BallotScanner";
 
 export function meta({}: Route.MetaArgs) {
   return [
@@ -12,6 +13,13 @@ export function meta({}: Route.MetaArgs) {
 }
 
 const contests = [
+  {
+    id: "ca-prop-36-2024",
+    label: "Proposition 36",
+    detail: "California November 2024 drug and theft crimes measure",
+    status: "Corpus pending reviewer approval",
+    enabled: false,
+  },
   {
     id: "scvosa-measure-d",
     label: "Measure D",
@@ -27,6 +35,8 @@ const contests = [
     enabled: false,
   },
 ];
+
+const defaultContestId = contests.find((contest) => contest.enabled)?.id ?? contests[0].id;
 
 const lenses = [
   {
@@ -93,7 +103,7 @@ const processSteps = [
 
 const omittedScope = [
   "No voting recommendation, ranking, or candidate match score.",
-  "No ballot image upload, OCR, address lookup, account, or durable voter profile.",
+  "No OCR, address lookup, account, durable voter profile, or stored ballot image.",
   "No November 2026 Prop 1/Prop 45 ingestion until official voter-guide materials are published.",
 ];
 
@@ -109,7 +119,7 @@ type CorrectionDraft = {
 };
 
 export default function Home() {
-  const [selectedContest, setSelectedContest] = useState(contests[0].id);
+  const [selectedContest, setSelectedContest] = useState(defaultContestId);
   const [selectedLenses, setSelectedLenses] = useState<string[]>(["climate-environment", "public-education"]);
   const [showResearch, setShowResearch] = useState(false);
   const [note, setNote] = useState("");
@@ -117,6 +127,7 @@ export default function Home() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [correctionDraft, setCorrectionDraft] = useState<CorrectionDraft | null>(null);
+  const [scannerNotice, setScannerNotice] = useState<string | null>(null);
   const activeContest = contests.find((contest) => contest.id === (brief?.contest_id ?? selectedContest)) ?? contests[0];
   const canLoadResearch = selectedLenses.length > 0 && contests.find((contest) => contest.id === selectedContest)?.enabled;
 
@@ -131,13 +142,14 @@ export default function Home() {
   }
 
   function resetSession() {
-    setSelectedContest(contests[0].id);
+    setSelectedContest(defaultContestId);
     setSelectedLenses([]);
     setShowResearch(false);
     setNote("");
     setBrief(null);
     setError(null);
     setCorrectionDraft(null);
+    setScannerNotice(null);
   }
 
   async function loadResearch() {
@@ -201,27 +213,48 @@ export default function Home() {
         <div className="max-w-3xl">
           <div className="flex flex-wrap gap-2">
             <p className="rounded-full bg-[#e7f3ea] px-3 py-1 text-xs font-semibold uppercase tracking-[0.14em] text-[#405349]">
-              Archived June 2026 demo
+              Archived 2024 Prop 36 build
             </p>
             <p className="rounded-full bg-[#fff6df] px-3 py-1 text-xs font-semibold uppercase tracking-[0.14em] text-[#6c5628]">
-              Santa Clara County · Measure D only
+              Scanner UI · review-gated corpus
             </p>
           </div>
           <h1 className="mt-4 font-serif text-5xl font-bold leading-[0.98] text-[#191815] sm:text-7xl">
             BallotSense shows its work before it speaks.
           </h1>
           <p className="mt-6 max-w-2xl text-lg leading-8 text-[#3f3b35]">
-            Explore reviewed Measure D election material through selected issue
-            lenses. This archive demo is research assistance, not a voting
-            recommendation, and it is deliberately narrow so every claim can
-            point back to reviewed source proof.
+            BallotSense is pivoting to an archived California November 2024
+            Proposition 36 demo corpus. The scanner starts as a privacy-safe
+            capture and confirmation flow while the source chunks stay
+            review-gated.
           </p>
           <ol className="mt-7 flex flex-wrap gap-3 text-sm font-semibold text-[#405349]">
             <li className="rounded-full bg-[#e7f3ea] px-3 py-1">1. Choose a contest</li>
-            <li className="rounded-full bg-[#e7f3ea] px-3 py-1">2. Pick up to 3 lenses</li>
+            <li className="rounded-full bg-[#e7f3ea] px-3 py-1">2. Scan or pick manually</li>
             <li className="rounded-full bg-[#e7f3ea] px-3 py-1">3. Inspect cited evidence</li>
           </ol>
         </div>
+
+        <div className="mt-8">
+          <BallotScanner
+            focusRing={focusRing}
+            onConfirmProp36={() => {
+              setSelectedContest("ca-prop-36-2024");
+              setShowResearch(false);
+              setBrief(null);
+              setError(null);
+              setScannerNotice(
+                "Proposition 36 is confirmed, but its source chunks are still pending reviewer approval. Cited research unlocks only after approval and embedding.",
+              );
+            }}
+          />
+        </div>
+
+        {scannerNotice && (
+          <p className="mt-4 max-w-4xl rounded-md border border-[#d2dfd6] bg-[#f8fff9] p-4 text-sm leading-6 text-[#405349]" role="status">
+            {scannerNotice}
+          </p>
+        )}
 
         <div className="mt-8 grid gap-4 lg:grid-cols-[1fr_0.9fr]">
           <section className="rounded-lg border border-[#c3d1c8] bg-white/90 p-5 shadow-sm">
@@ -277,13 +310,12 @@ export default function Home() {
               </h3>
               <p className="mt-2 text-sm leading-6 text-[#665f54]">
                 Automated address lookup is not enabled for this archive demo.
-                Use the manual contest picker below, or open the official
-                Santa Clara County Registrar of Voters tools in a new tab.
+                Use the scanner prototype or manual contest picker below, or
+                open official election lookup tools in a new tab.
               </p>
               <p className="mt-2 rounded-md bg-[#f7f3eb] p-3 text-sm leading-6 text-[#665f54]">
-                Ballot upload and OCR are intentionally omitted here. The demo
-                never asks for a ballot image, marked ballot, or sample-ballot
-                photo.
+                Scanner images are browser-memory previews only in this phase.
+                OCR is not connected yet, and marked ballots should not be used.
               </p>
               <div className="mt-3 grid gap-2">
                 {officialLookupLinks.map((link) => (

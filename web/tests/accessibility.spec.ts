@@ -56,6 +56,20 @@ test("main cited-research and correction flow has no obvious accessibility viola
   const initialAccessibility = await new AxeBuilder({ page }).analyze();
   expect(initialAccessibility.violations).toEqual([]);
 
+  await expect(page.getByRole("heading", { name: "Scan a ballot item" })).toBeVisible();
+  await page.setInputFiles("#ballot-scanner-image", {
+    name: "prop-36-sample-ballot.png",
+    mimeType: "image/png",
+    buffer: Buffer.from(
+      "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+/p9sAAAAASUVORK5CYII=",
+      "base64",
+    ),
+  });
+  await expect(page.getByText("Image loaded in memory only")).toBeVisible();
+  await page.getByRole("button", { name: "Confirm Proposition 36" }).click();
+  await expect(page.getByText("Proposition 36 is confirmed")).toBeVisible();
+  await page.getByLabel("Measure D").check();
+
   await page.getByRole("button", { name: "View cited research" }).click();
   await expect(page.getByRole("heading", { name: "What the reviewed material says" })).toBeVisible();
   await expect(page.getByText("Research assistance only")).toBeVisible();

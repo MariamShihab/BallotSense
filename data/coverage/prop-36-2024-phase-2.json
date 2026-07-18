@@ -1,0 +1,17 @@
+{
+  "election_id": "ca-general-2024-11-05",
+  "contest_id": "ca-prop-36-2024",
+  "updated_at": "2026-07-18T22:24:12.335756Z",
+  "current_target": "Archived California November 2024 Proposition 36 demo corpus",
+  "master_pdf_manifest": "data/source_snapshots/ca-general-2024-11-05/ca-prop-36-2024/master-pdf-manifest.json",
+  "review_packet": "data/review_packets/prop-36-2024.json",
+  "source_record": "data/source_records/prop-36-2024.json",
+  "status": "pending_reviewer_approval",
+  "acceptance_gate": [
+    "Master PDF snapshot exists and matches SHA-256 manifest.",
+    "Source record remains pending until reviewer approval.",
+    "Chunks are extraction candidates only; they are not retrievable.",
+    "No embeddings are generated before approved corpus promotion."
+  ],
+  "deliberate_gap": "Until review is complete, every voter-facing Prop 36 query must abstain or show pending-review status."
+}

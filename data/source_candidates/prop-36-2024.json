@@ -1,0 +1,30 @@
+{
+  "election_id": "ca-general-2024-11-05",
+  "contest_id": "ca-prop-36-2024",
+  "jurisdiction": "California",
+  "reviewer": "Project owner (user)",
+  "sources": [
+    {
+      "id": "ca-2024-vig-complete",
+      "title": "California Official Voter Information Guide, November 5, 2024 General Election",
+      "canonical_url": "https://vig.cdn.sos.ca.gov/2024/general/pdf/complete-vig.pdf",
+      "publisher": "California Secretary of State",
+      "expected_source_type": "state_voter_guide",
+      "source_tier": 1,
+      "election_id": "ca-general-2024-11-05",
+      "jurisdiction": "California",
+      "contest_id": "ca-prop-36-2024",
+      "document_role": "official Prop 36 title, summary, Legislative Analyst analysis, arguments, rebuttals, and measure text",
+      "artifact_kind": "PDF",
+      "has_stable_locator": true,
+      "inclusion_reason": "The California Secretary of State official voter guide is the primary neutral government source for statewide Proposition 36.",
+      "attribution_note": "Tier 1 state voter guide. Ballot arguments inside the guide must still be attributed to their named proponents/opponents.",
+      "retrieved_at": "2026-07-18T22:19:11.284191Z",
+      "published_at": null,
+      "status": "pending_review",
+      "reviewer": "Project owner (user)",
+      "review_note": "Pending reviewer comparison against the master PDF snapshot."
+    }
+  ],
+  "known_gap": "This packet uses the complete official guide as one master source. Chunk-level review must separate neutral analysis from attributed arguments."
+}

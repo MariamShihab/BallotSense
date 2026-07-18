@@ -1,7 +1,10 @@
 """Promote reviewer-approved excerpts into a retrieval-eligible corpus file."""
 
+# ruff: noqa: E402, I001
+
 from __future__ import annotations
 
+import argparse
 import json
 import sys
 from pathlib import Path
@@ -10,15 +13,15 @@ from pathlib import Path
 ROOT = Path(__file__).parents[1]
 sys.path.insert(0, str(ROOT))
 
-from ballotsense_api.models import SourceChunk, SourceChunkCandidate
+from ballotsense_api.models import SourceChunk, SourceChunkCandidate  # noqa: E402
 
 
-PACKET_PATH = ROOT / "data/review_packets/measure-d.json"
-OUTPUT_PATH = ROOT / "data/corpus/measure-d-approved-chunks.json"
+DEFAULT_PACKET_PATH = ROOT / "data/review_packets/measure-d.json"
+DEFAULT_OUTPUT_PATH = ROOT / "data/corpus/measure-d-approved-chunks.json"
 
 
-def main() -> None:
-    packet = json.loads(PACKET_PATH.read_text())
+def promote(packet_path: Path, output_path: Path) -> None:
+    packet = json.loads(packet_path.read_text())
     if packet.get("review_decision") != "approved":
         raise ValueError("review packet must be explicitly approved before promotion")
 
@@ -38,8 +41,8 @@ def main() -> None:
         ).model_dump(mode="json")
         for chunk in chunks
     ]
-    OUTPUT_PATH.parent.mkdir(parents=True, exist_ok=True)
-    OUTPUT_PATH.write_text(
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    output_path.write_text(
         json.dumps(
             {
                 "election_id": packet["election_id"],
@@ -52,6 +55,14 @@ def main() -> None:
         )
         + "\n"
     )
+
+
+def main() -> None:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--packet", type=Path, default=DEFAULT_PACKET_PATH)
+    parser.add_argument("--output", type=Path, default=DEFAULT_OUTPUT_PATH)
+    args = parser.parse_args()
+    promote(args.packet, args.output)
 
 
 if __name__ == "__main__":

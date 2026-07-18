@@ -26,9 +26,12 @@ packet. Durations are planning targets, not permission to skip quality gates.
 A phase does not finish when its time box ends; it finishes only when its
 acceptance checklist passes.
 
-The first realistic goal is a small, private **archived June 2026 demo** in
-approximately 9–10 weeks. A public November release remains conditional on the
-release gate in Phase 8; it is never automatic.
+The current fast-demo goal is an **Archived California November 2024
+Proposition 36 demo corpus**. This lets the team validate the end-to-end
+snapshot, hash, review, retrieval, citation, and scanner-detection flow while
+November 2026 voter-guide materials are still unpublished. A public November
+2026 release remains conditional on the release gate in Phase 8; it is never
+automatic.
 
 ### Ownership key
 
@@ -247,6 +250,19 @@ complete, even if related setup work has begun.
 - [x] **8.1, demo readiness checklist** Added a pre-demo checklist for CI,
       GitHub README rendering, local UI walkthrough, source proof, abstention,
       correction reports, privacy copy, and November source readiness.
+- [x] **Pivot, Prop 36 target approval** Project owner approved shifting the
+      current build target to the Archived California November 2024 Proposition
+      36 demo corpus on 2026-07-18. The official California Secretary of State
+      complete 2024 Voter Information Guide PDF is the master source anchor.
+- [x] **Prop 36 Phase 1** Snapshot and hash the official master PDF; commit the
+      manifest and source metadata, not the large PDF bytes.
+- [x] **Prop 36 Phase 2** Extract Prop 36 page-level chunk candidates into a
+      pending reviewer packet. Do not promote, ingest, or embed until reviewer
+      approval is explicit.
+- [x] **Prop 36 Phase 3, scanner UI shell** Added a browser-memory-only ballot
+      scanner prototype for unmarked ballot/sample-ballot images. It does not
+      upload images, run OCR, store photos, infer vote choices, or unlock cited
+      Prop 36 research before review approval.
 
 ## Phase 0 — Product decisions and governance
 
@@ -261,8 +277,8 @@ complete, even if related setup work has begun.
    approval section.
 2. State the unchanging product rule: BallotSense is a cited research assistant,
    not a voting recommender.
-3. State the initial geography and election: archived June 2026 primary,
-   Santa Clara County scope.
+3. State the current demo geography and election: archived California November
+   5, 2024 general election, starting with statewide Proposition 36.
 4. State that the first public-facing dataset is limited to one measure and one
    candidate race, not a whole ballot.
 5. State that match scores, free-text political profiles, account creation, and
@@ -509,6 +525,29 @@ The reviewer checks, for every source/chunk:
 
 **Stop point:** Do not generate embeddings or call Gemini for voter answers
 until the approved corpus passes this checklist.
+
+### Phase 2A — Archived Proposition 36 2024 corpus
+
+**Owner:** AI prepares; reviewer approves.
+
+This is the current active corpus path. It follows the same Phase 2 rules with
+one important addition: the complete official voter guide PDF is treated as the
+master authenticity anchor.
+
+1. [x] Snapshot the official California Secretary of State 2024 complete voter
+   guide PDF from
+   `https://vig.cdn.sos.ca.gov/2024/general/pdf/complete-vig.pdf`.
+2. [x] Compute SHA-256 over the exact saved PDF bytes.
+3. [x] Record the master manifest under
+   `data/source_snapshots/ca-general-2024-11-05/ca-prop-36-2024/`.
+4. [x] Generate pending source-candidate and source-record files for
+   `ca-prop-36-2024`.
+5. [x] Extract page-level verbatim chunk candidates for the Prop 36 title,
+   summary, Legislative Analyst analysis, arguments/rebuttals, and full text.
+6. [x] Keep the review packet at `review_decision: pending`.
+7. [x] Refuse promotion to `data/corpus` until the reviewer explicitly approves
+   the packet.
+8. [x] Refuse embeddings until the approved corpus file exists.
 
 ## Phase 3 — Firestore and retrieval
 
@@ -796,10 +835,11 @@ suite passes.
 
 **Owner:** You approve; AI supplies feasibility and privacy assessment.
 
-Decision approved on 2026-07-12: skip OCR and ballot image uploads for the
-archive demo. OCR may be reconsidered only if it clearly improves ballot
-discovery over manual/official lookup and the team can prove in-memory-only
-image handling.
+Decision approved on 2026-07-12: skip backend OCR and ballot image uploads for
+the archive demo. On 2026-07-18, the project owner approved a Prop 36 scanner
+UI shell that previews an unmarked ballot/sample-ballot image in browser memory
+only. OCR may be reconsidered only if it clearly improves ballot discovery over
+manual/official lookup and the team can prove in-memory-only image handling.
 
 ### 7.3 Implement OCR only after approval
 
@@ -825,10 +865,11 @@ reconsideration.
 
 - [x] Address errors cannot silently alter the contest list.
 - [x] No ballot image persistence is detected in tests, storage, or logs
-      because ballot image upload/OCR is not implemented for the archive demo.
+      because the scanner UI keeps images in browser memory and backend
+      upload/OCR is not implemented for the archive demo.
 - [x] Manual contest selection remains available.
-- [x] OCR can be disabled independently by omission; no archive-demo route or
-      UI accepts ballot images.
+- [x] OCR can be disabled independently by omission; no archive-demo route sends
+      ballot images to the backend.
 
 ## Phase 8 — November/public release decision
 

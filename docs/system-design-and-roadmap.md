@@ -14,9 +14,11 @@ material.
 
 ### Initial delivery strategy
 
-- Use the **archived June 2026 California primary** as a controlled demo
-  corpus, beginning with a deliberately small set of Santa Clara County
-  contests or measures.
+- Use the **Archived California November 2024 Proposition 36 demo corpus** as
+  the current build target. The complete California Secretary of State 2024
+  Voter Information Guide PDF is the master authenticity anchor for this corpus.
+- Keep the earlier Measure D work as an internal archive-demo fixture and
+  regression suite, not the current data-expansion target.
 - Validate source quality, retrieval, explanation, citations, and voter
   usability before considering a public election deployment.
 - A November 2026 release is a conditional goal, not a deadline. It happens
@@ -33,8 +35,9 @@ material.
 ### 2.1 What the MVP does
 
 1. A voter selects a small set of issue lenses.
-2. The voter selects contests manually, enters an address, or—in a later
-   iteration—scans an **unmarked** ballot or official sample ballot.
+2. The voter selects contests manually or—in the next experimental iteration—
+   scans an **unmarked** ballot or official sample ballot to detect and confirm
+   supported measures.
 3. BallotSense shows a concise, cited explanation for each contest.
 4. The voter can compare verified, attributed statements relevant to their
    selected lenses.
@@ -606,7 +609,8 @@ demo; advance when the phase's acceptance criteria pass.
 Tasks:
 
 1. Approve this system design and the source policy.
-2. Select the initial June 2026 demo contests/measures.
+2. Use the archived California November 2024 Proposition 36 corpus as the
+   current end-to-end demo target.
 3. Define the issue-lens list and plain-language descriptions.
 4. Define source tiers, review roles, correction workflow, and election-release
    owner.

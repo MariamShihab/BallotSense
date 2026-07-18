@@ -34,7 +34,14 @@ different posture:
 
 ## Current demo scope
 
-The current app is an **archived June 2026 Santa Clara County demo** centered on:
+The current build target is an **Archived California November 2024 Proposition
+36 demo corpus**. We are using the official California Secretary of State 2024
+Voter Information Guide as ground truth so the citation pipeline and ballot
+scanner can be validated now, without waiting for November 2026 voter-guide
+publication.
+
+The existing app is still an **archived June 2026 Santa Clara County demo**
+centered on:
 
 - **Measure D** — Santa Clara Valley Open Space Authority special parcel tax
 - Fixed issue lenses:
@@ -57,15 +64,17 @@ BallotSense currently does **not**:
 - recommend, rank, or endorse choices;
 - show a numeric candidate/measure match score;
 - store durable political preferences;
-- upload ballot images;
+- send ballot images to the backend;
 - run OCR on user ballot photos;
 - infer a voter’s address or ballot automatically;
 - ingest November 2026 proposition material before official voter-guide sources
-  are published.
+  are published;
+- generate Prop 36 embeddings until the official 2024 voter-guide PDF is
+  snapshotted, hashed, extracted, and reviewer-approved.
 
-Ballot image capture/OCR is intentionally omitted from the archive demo. A future
-prototype could explore it, but only with strong privacy guarantees and clear
-user consent.
+Ballot image capture now exists only as a browser-memory scanner prototype. OCR
+and backend image upload remain intentionally omitted until the privacy and
+review gates are ready.
 
 ## How it works
 
@@ -131,6 +140,32 @@ the most inspectable one.
   image upload, durable profiles, and automatic address lookup.
 - **Reviewer workflow is first-class.** Corrections and source review are part of
   the system design, not an afterthought.
+
+## Current Prop 36 2024 corpus work
+
+The current ingestion target is:
+
+- election: California November 5, 2024 General Election
+- contest: Proposition 36
+- master source:
+  [Official Voter Information Guide PDF](https://vig.cdn.sos.ca.gov/2024/general/pdf/complete-vig.pdf)
+- archive landing page:
+  [California SOS 2024 General Election VIG archive](https://vigarchive.sos.ca.gov/2024/general/)
+
+Run the Prop 36 source preparation commands:
+
+```bash
+make snapshot-prop36-source
+make prepare-prop36-review
+```
+
+The promotion command is intentionally review-gated:
+
+```bash
+make promote-prop36-review
+```
+
+It should fail until the reviewer explicitly approves the pending review packet.
 
 ## November 2026 status
 
@@ -241,15 +276,17 @@ make check-november-sources
 - [Phase 8 statewide measure inventory](docs/phase-8-statewide-measure-inventory.md)
 - [Phase 8 source readiness check](docs/phase-8-source-readiness-2026-07-12.md)
 - [Phase 8 archive demo polish pass](docs/phase-8-archive-demo-polish.md)
+- [Phase 1–2 Prop 36 2024 corpus plan](docs/phase-1-2-prop36-2024-corpus.md)
 - [Demo readiness checklist](docs/demo-readiness-checklist.md)
 - [MVP decision packet](docs/mvp-decision-packet.md)
 - [Sequential execution plan](docs/execution-plan.md)
 
 ## Roadmap
 
-- Keep the Measure D archive demo polished and demo-ready.
+- Prepare and review the archived Prop 36 2024 corpus.
+- Connect OCR only after the scanner privacy contract and Prop 36 review gate
+  are ready.
 - Monitor November 2026 official voter-guide publication.
-- Snapshot/hash official Prop 1 sources when published.
 - Extract, chunk, and human-review Prop 1 material.
 - Add embeddings only after the reviewed corpus passes acceptance checks.
 - Expand to Prop 45 only after the Prop 1 vertical slice is trustworthy.

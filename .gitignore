@@ -217,3 +217,9 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# BallotSense source snapshots
+# Large official artifacts are snapshotted locally / in GCS and represented in
+# git by SHA-256 manifests plus source records.
+data/source_snapshots/**/*.pdf
+data/source_snapshots/**/*.tmp

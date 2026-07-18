@@ -1,0 +1,26 @@
+{
+  "election_id": "ca-general-2024-11-05",
+  "contest_id": "ca-prop-36-2024",
+  "retrieval_batch_at": "2026-07-18T22:19:11.284191Z",
+  "sources": [
+    {
+      "id": "ca-2024-vig-complete",
+      "title": "California Official Voter Information Guide, November 5, 2024 General Election",
+      "canonical_url": "https://vig.cdn.sos.ca.gov/2024/general/pdf/complete-vig.pdf",
+      "publisher": "California Secretary of State",
+      "source_type": "state_voter_guide",
+      "source_tier": 1,
+      "election_id": "ca-general-2024-11-05",
+      "jurisdiction": "California",
+      "contest_id": "ca-prop-36-2024",
+      "retrieved_at": "2026-07-18T22:19:11.284191Z",
+      "published_at": null,
+      "content_sha256": "4f7fef63bddb5c60aaabda673b57ae4375105ce941d2ff9dc9d7136aee7e4ef4",
+      "snapshot_uri": "gs://ballotsense-mvp-source-snapshots/ca-general-2024-11-05/ca-prop-36-2024/ca-2024-vig-complete/4f7fef63bddb5c60aaabda673b57ae4375105ce941d2ff9dc9d7136aee7e4ef4.pdf",
+      "corpus_release_id": null,
+      "review_status": "pending",
+      "reviewed_at": null,
+      "reviewer": "Project owner (user)"
+    }
+  ]
+}
