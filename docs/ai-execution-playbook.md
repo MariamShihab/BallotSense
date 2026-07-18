@@ -240,6 +240,10 @@ complete, even if related setup work has begun.
 - [x] **8.1, source monitor** Added `make check-november-sources` to re-check
       the official SOS voter-guide and qualified-measures pages without
       snapshotting, ingesting, embedding, or storing November sources.
+- [x] **8.1, archive demo polish** Improved the archive demo copy and UI while
+      November sources are unpublished: clearer scope labels, a how-it-works
+      section, omitted-feature callouts, stronger insufficient-evidence states,
+      and clearer source-proof affordances.
 
 ## Phase 0 — Product decisions and governance
 

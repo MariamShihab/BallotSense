@@ -16,11 +16,15 @@ const contests = [
     id: "scvosa-measure-d",
     label: "Measure D",
     detail: "Santa Clara Valley Open Space Authority special parcel tax",
+    status: "Available in archive demo",
+    enabled: true,
   },
   {
     id: "scc-bos-district-1",
     label: "Board of Supervisors, District 1",
-    detail: "Candidate race to add after the measure flow is proven",
+    detail: "Future candidate-race corpus; not included in this reviewed archive demo.",
+    status: "Not covered yet",
+    enabled: false,
   },
 ];
 
@@ -69,6 +73,29 @@ const officialLookupLinks = [
 ];
 
 const focusRing = "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#245c4d]";
+const selectedLensNames = (lensIds: string[]) =>
+  lensIds.map((id) => lenses.find((lens) => lens.id === id)?.label ?? id);
+
+const processSteps = [
+  {
+    title: "Reviewed sources first",
+    detail: "BallotSense starts from official and reviewer-approved election material, not from model memory.",
+  },
+  {
+    title: "Lens-specific retrieval",
+    detail: "The demo checks your selected lenses against the reviewed Measure D archive corpus.",
+  },
+  {
+    title: "Cited or abstained",
+    detail: "Each card either shows source proof or says there is not enough verified evidence.",
+  },
+];
+
+const omittedScope = [
+  "No voting recommendation, ranking, or candidate match score.",
+  "No ballot image upload, OCR, address lookup, account, or durable voter profile.",
+  "No November 2026 Prop 1/Prop 45 ingestion until official voter-guide materials are published.",
+];
 
 type Citation = { source_id: string; chunk_id: string; locator: string; public_source_url: string; source_type: string };
 type Finding = { status: string; lens_id: string; summary: { text: string; citations: Citation[]; attribution?: string } | null; explanation: string | null };
@@ -91,6 +118,7 @@ export default function Home() {
   const [error, setError] = useState<string | null>(null);
   const [correctionDraft, setCorrectionDraft] = useState<CorrectionDraft | null>(null);
   const activeContest = contests.find((contest) => contest.id === (brief?.contest_id ?? selectedContest)) ?? contests[0];
+  const canLoadResearch = selectedLenses.length > 0 && contests.find((contest) => contest.id === selectedContest)?.enabled;
 
   function toggleLens(lens: string) {
     setSelectedLenses((current) =>
@@ -113,6 +141,7 @@ export default function Home() {
   }
 
   async function loadResearch() {
+    if (!canLoadResearch) return;
     setLoading(true);
     setError(null);
     try {
@@ -170,22 +199,56 @@ export default function Home() {
     <main className="min-h-screen bg-[linear-gradient(135deg,#f7f3eb_0%,#f7f3eb_52%,#dbe8df_52%,#dbe8df_100%)]">
       <section className="mx-auto flex min-h-screen w-full max-w-6xl flex-col justify-center px-5 py-10 sm:px-8">
         <div className="max-w-3xl">
-          <p className="text-sm font-semibold uppercase tracking-[0.16em] text-[#52685c]">
-            Archived June 2026 demo · Santa Clara County
-          </p>
+          <div className="flex flex-wrap gap-2">
+            <p className="rounded-full bg-[#e7f3ea] px-3 py-1 text-xs font-semibold uppercase tracking-[0.14em] text-[#405349]">
+              Archived June 2026 demo
+            </p>
+            <p className="rounded-full bg-[#fff6df] px-3 py-1 text-xs font-semibold uppercase tracking-[0.14em] text-[#6c5628]">
+              Santa Clara County · Measure D only
+            </p>
+          </div>
           <h1 className="mt-4 font-serif text-5xl font-bold leading-[0.98] text-[#191815] sm:text-7xl">
             BallotSense shows its work before it speaks.
           </h1>
           <p className="mt-6 max-w-2xl text-lg leading-8 text-[#3f3b35]">
-            Explore reviewed election material through your selected lenses.
-            BallotSense is research assistance, not a voting recommendation.
-            There is no account, ballot image, or durable preference storage.
+            Explore reviewed Measure D election material through selected issue
+            lenses. This archive demo is research assistance, not a voting
+            recommendation, and it is deliberately narrow so every claim can
+            point back to reviewed source proof.
           </p>
           <ol className="mt-7 flex flex-wrap gap-3 text-sm font-semibold text-[#405349]">
             <li className="rounded-full bg-[#e7f3ea] px-3 py-1">1. Choose a contest</li>
             <li className="rounded-full bg-[#e7f3ea] px-3 py-1">2. Pick up to 3 lenses</li>
             <li className="rounded-full bg-[#e7f3ea] px-3 py-1">3. Inspect cited evidence</li>
           </ol>
+        </div>
+
+        <div className="mt-8 grid gap-4 lg:grid-cols-[1fr_0.9fr]">
+          <section className="rounded-lg border border-[#c3d1c8] bg-white/90 p-5 shadow-sm">
+            <h2 className="text-xl font-semibold text-[#191815]">How BallotSense works</h2>
+            <div className="mt-4 grid gap-3 sm:grid-cols-3">
+              {processSteps.map((step, index) => (
+                <article key={step.title} className="rounded-md border border-[#d2dfd6] bg-[#f8fff9] p-4">
+                  <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[#52685c]">
+                    Step {index + 1}
+                  </p>
+                  <h3 className="mt-2 font-semibold text-[#191815]">{step.title}</h3>
+                  <p className="mt-2 text-sm leading-6 text-[#53675b]">{step.detail}</p>
+                </article>
+              ))}
+            </div>
+          </section>
+
+          <section className="rounded-lg border border-[#e0d4c1] bg-[#fffbf2]/90 p-5 shadow-sm">
+            <h2 className="text-xl font-semibold text-[#191815]">What this demo does not do</h2>
+            <ul className="mt-4 grid gap-3 text-sm leading-6 text-[#665f54]">
+              {omittedScope.map((item) => (
+                <li key={item} className="rounded-md border border-[#eadcc8] bg-white px-3 py-2">
+                  {item}
+                </li>
+              ))}
+            </ul>
+          </section>
         </div>
 
         <div className="mt-10 grid gap-5 lg:grid-cols-[1fr_0.85fr]">
@@ -242,11 +305,12 @@ export default function Home() {
               {contests.map((contest) => (
                 <label
                   key={contest.id}
-                  className={`flex cursor-pointer items-start gap-3 rounded-md border border-[#ddd2c1] bg-white p-4 transition has-[:checked]:border-[#386859] has-[:checked]:bg-[#edf5ef] ${focusRing}`}
+                  className={`flex items-start gap-3 rounded-md border border-[#ddd2c1] bg-white p-4 transition has-[:checked]:border-[#386859] has-[:checked]:bg-[#edf5ef] ${contest.enabled ? "cursor-pointer" : "cursor-not-allowed opacity-75"} ${focusRing}`}
                 >
                   <input
                     checked={selectedContest === contest.id}
                     className={`mt-1 h-4 w-4 accent-[#386859] ${focusRing}`}
+                    disabled={!contest.enabled}
                     name="contest"
                     onChange={() => setSelectedContest(contest.id)}
                     type="radio"
@@ -257,6 +321,9 @@ export default function Home() {
                     </span>
                     <span className="mt-1 block text-sm leading-6 text-[#665f54]">
                       {contest.detail}
+                    </span>
+                    <span className="mt-2 inline-flex rounded-full bg-[#f0f7f1] px-2 py-1 text-xs font-semibold text-[#405349]">
+                      {contest.status}
                     </span>
                   </span>
                 </label>
@@ -298,13 +365,13 @@ export default function Home() {
               Select up to three. Selected:{" "}
               <span className="font-semibold">
                 {selectedLenses.length > 0
-                  ? selectedLenses.map((id) => lenses.find((lens) => lens.id === id)?.label).join(", ")
+                  ? selectedLensNames(selectedLenses).join(", ")
                   : "No lenses selected"}
               </span>
             </div>
             <button
               type="button"
-              disabled={selectedLenses.length === 0}
+              disabled={!canLoadResearch}
               onClick={loadResearch}
               className={`mt-5 w-full rounded-md bg-[#245c4d] px-4 py-3 font-semibold text-white transition hover:bg-[#19483c] disabled:cursor-not-allowed disabled:bg-[#9aaca3] ${focusRing}`}
             >
@@ -315,28 +382,53 @@ export default function Home() {
 
         {error && <p className="mt-6 max-w-3xl rounded-md bg-[#fff0ed] p-4 text-[#7a3324]" role="alert">{error}</p>}
         {showResearch && brief && (
-          <section className="mt-6 max-w-3xl rounded-lg border border-[#c3d1c8] bg-white/95 p-5 shadow-sm" aria-live="polite">
+          <section className="mt-6 max-w-4xl rounded-lg border border-[#c3d1c8] bg-white/95 p-5 shadow-sm" aria-live="polite">
             <p className="text-sm font-semibold uppercase tracking-[0.14em] text-[#52685c]">{activeContest.label} research brief</p>
             <h2 className="mt-2 text-2xl font-semibold text-[#191815]">What the reviewed material says</h2>
             <p className="mt-2 text-sm leading-6 text-[#665f54]">{brief.disclaimer}</p>
+            <p className="mt-3 rounded-md border border-[#d2dfd6] bg-[#f8fff9] p-3 text-sm leading-6 text-[#53675b]">
+              Reading tip: supported cards are backed by reviewed citations.
+              Insufficient-evidence cards are intentional abstentions, not app
+              errors.
+            </p>
             <div className="mt-5 grid gap-4">
               {brief.findings.map((finding) => {
                 const lens = lenses.find((item) => item.id === finding.lens_id);
+                const hasEvidence = finding.status === "supported" && finding.summary?.citations.length;
                 return (
-                  <article key={finding.lens_id} className="rounded-md border border-[#ddd2c1] p-4">
+                  <article
+                    key={finding.lens_id}
+                    className={`rounded-md border p-4 ${
+                      hasEvidence
+                        ? "border-[#d2dfd6] bg-white"
+                        : "border-[#eadcc8] bg-[#fffaf0]"
+                    }`}
+                  >
                     <div className="flex flex-wrap items-center justify-between gap-2">
                       <h3 className="font-semibold text-[#191815]">{lens?.label ?? finding.lens_id}</h3>
-                      <span className="rounded-full bg-[#edf5ef] px-2 py-1 text-xs font-semibold text-[#405349]" aria-label={`Status: ${finding.status}`}>
-                        {finding.status}
+                      <span
+                        className={`rounded-full px-2 py-1 text-xs font-semibold ${
+                          hasEvidence ? "bg-[#edf5ef] text-[#405349]" : "bg-[#f5ead4] text-[#6c5628]"
+                        }`}
+                        aria-label={`Status: ${finding.status}`}
+                      >
+                        {hasEvidence ? "cited evidence" : "insufficient verified evidence"}
                       </span>
                     </div>
                     <p className="mt-3 leading-7 text-[#3f3b35]">{finding.summary?.text ?? finding.explanation}</p>
+                    {!hasEvidence && (
+                      <p className="mt-3 rounded-md bg-white p-3 text-sm leading-6 text-[#665f54]">
+                        BallotSense is abstaining here because the reviewed archive
+                        corpus does not contain enough source-backed material for
+                        this lens.
+                      </p>
+                    )}
                     {finding.summary?.citations.map((citation) => {
                       const citationKey = `${citation.source_id}:${citation.chunk_id}`;
                       const isReporting = correctionDraft?.citationKey === citationKey;
                       return (
-                      <details key={citationKey} className="mt-4 rounded-md bg-[#f7f3eb] p-3">
-                        <summary className={`cursor-pointer rounded-sm font-semibold text-[#245c4d] ${focusRing}`}>Inspect source proof</summary>
+                      <details key={citationKey} className="mt-4 rounded-md border border-[#e1d7c9] bg-[#f7f3eb] p-3">
+                        <summary className={`cursor-pointer rounded-sm font-semibold text-[#245c4d] ${focusRing}`}>Inspect source proof for this claim</summary>
                         <p className="mt-2 text-sm text-[#665f54]">{sourceTypeLabels[citation.source_type] ?? citation.source_type} · {citation.locator}</p>
                         <a className={`mt-2 inline-block rounded-sm text-sm font-semibold text-[#245c4d] underline ${focusRing}`} href={citation.public_source_url} target="_blank" rel="noreferrer">Open original source</a>
                         <div className="mt-3 border-t border-[#e1d7c9] pt-3">
