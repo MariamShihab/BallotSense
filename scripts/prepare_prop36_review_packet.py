@@ -92,29 +92,167 @@ def page_texts() -> dict[int, str]:
     return extracted
 
 
+def slice_from(text: str, start: str, *, end: str | None = None) -> str:
+    if start not in text:
+        raise ValueError(f"could not locate start marker: {start}")
+    sliced = text[text.index(start) :]
+    if end is not None:
+        if end not in sliced:
+            raise ValueError(f"could not locate end marker: {end}")
+        sliced = sliced[: sliced.index(end)]
+    return clean_text(sliced)
+
+
+def make_candidate(
+    *,
+    chunk_id: str,
+    text: str,
+    locator: str,
+    reviewer_note: str,
+    status: ExtractionStatus = ExtractionStatus.NEEDS_REVIEWER_COMPARISON,
+) -> dict:
+    candidate = SourceChunkCandidate(
+        id=chunk_id,
+        source_id=SOURCE_ID,
+        election_id=ELECTION_ID,
+        contest_id=CONTEST_ID,
+        text=text,
+        locator=locator,
+        extraction_method="digital PDF text extraction from master snapshot",
+        extraction_status=status,
+        reviewer_note=reviewer_note,
+    )
+    return candidate.model_dump(mode="json")
+
+
 def build_candidate_chunks(extracted_pages: dict[int, str]) -> list[dict]:
-    chunks: list[dict] = []
-    for section, pages in PAGE_RANGES.items():
-        for page_number in pages:
-            text = extracted_pages[page_number]
-            if page_number == 126 and "PROPOSITION 36" in text:
-                text = text[text.index("PROPOSITION 36") :].strip()
-            candidate = SourceChunkCandidate(
-                id=f"ca-prop-36-2024-vig-p{page_number:03d}",
-                source_id=SOURCE_ID,
-                election_id=ELECTION_ID,
-                contest_id=CONTEST_ID,
+    page_58 = extracted_pages[58]
+    page_59 = extracted_pages[59]
+    page_60 = extracted_pages[60]
+    page_61 = extracted_pages[61]
+    page_62 = extracted_pages[62]
+    page_63 = extracted_pages[63]
+
+    chunks: list[dict] = [
+        make_candidate(
+            chunk_id="ca-prop-36-2024-title-summary",
+            text=slice_from(page_58, "PROPOSITION ALLOWS", end="ANALYSIS BY"),
+            locator="Official VIG PDF p. 58, title and summary",
+            status=ExtractionStatus.READY_FOR_REVIEW,
+            reviewer_note=(
+                "Neutral Attorney General title/summary candidate. Compare bullets and fiscal "
+                "summary against p. 58 before approval."
+            ),
+        ),
+        make_candidate(
+            chunk_id="ca-prop-36-2024-lao-background",
+            text=clean_text(
+                slice_from(page_58, "ANALYSIS BY")
+                + "\n\n"
+                + slice_from(page_59, "misdemeanors.", end="PROPOSAL")
+            ),
+            locator="Official VIG PDF pp. 58-59, LAO background",
+            reviewer_note=(
+                "Neutral Legislative Analyst background. Confirm the cross-page join and "
+                "consider trimming repeated headers before approval."
+            ),
+        ),
+        make_candidate(
+            chunk_id="ca-prop-36-2024-lao-proposal",
+            text=clean_text(
+                slice_from(page_59, "PROPOSAL")
+                + "\n\n"
+                + slice_from(page_60, "get treatment", end="FISCAL EFFECTS")
+            ),
+            locator="Official VIG PDF pp. 59-60, LAO proposal description",
+            reviewer_note=(
+                "Neutral Legislative Analyst proposal description. Confirm theft, drug, "
+                "treatment-mandated felony, and warning sections before approval."
+            ),
+        ),
+        make_candidate(
+            chunk_id="ca-prop-36-2024-lao-fiscal-effects",
+            text=clean_text(
+                slice_from(page_60, "FISCAL EFFECTS")
+                + "\n\n"
+                + slice_from(page_61, "community supervision.", end="Visit sos.ca.gov")
+            ),
+            locator="Official VIG PDF pp. 60-61, LAO fiscal effects",
+            reviewer_note=(
+                "Neutral Legislative Analyst fiscal-effects candidate. Confirm state/local "
+                "cost estimates and Proposition 47 savings language before approval."
+            ),
+        ),
+        make_candidate(
+            chunk_id="ca-prop-36-2024-argument-in-favor",
+            text=slice_from(
+                page_62,
+                "★  ARGUMENT IN FAVOR OF PROPOSITION 36",
+                end="★  REBUTTAL TO ARGUMENT IN FAVOR OF PROPOSITION 36",
+            ),
+            locator="Official VIG PDF p. 62, argument in favor",
+            reviewer_note=(
+                "Attributed ballot argument. Do not treat as neutral fact; preserve authorship "
+                "and VIG accuracy disclaimer in UI/source labels."
+            ),
+        ),
+        make_candidate(
+            chunk_id="ca-prop-36-2024-rebuttal-to-favor",
+            text=slice_from(
+                page_62,
+                "★  REBUTTAL TO ARGUMENT IN FAVOR OF PROPOSITION 36",
+                end="62 | Arguments",
+            ),
+            locator="Official VIG PDF p. 62, rebuttal to argument in favor",
+            reviewer_note=(
+                "Attributed rebuttal by opponents. Do not treat as neutral fact; compare full "
+                "wording and author list before approval."
+            ),
+        ),
+        make_candidate(
+            chunk_id="ca-prop-36-2024-argument-against",
+            text=slice_from(
+                page_63,
+                "★  ARGUMENT AGAINST PROPOSITION 36",
+                end="★  REBUTTAL TO ARGUMENT AGAINST PROPOSITION 36",
+            ),
+            locator="Official VIG PDF p. 63, argument against",
+            reviewer_note=(
+                "Attributed ballot argument. Do not treat as neutral fact; compare full "
+                "wording and author list before approval."
+            ),
+        ),
+        make_candidate(
+            chunk_id="ca-prop-36-2024-rebuttal-to-against",
+            text=slice_from(
+                page_63,
+                "★  REBUTTAL TO ARGUMENT AGAINST PROPOSITION 36",
+                end="Arguments printed on this page",
+            ),
+            locator="Official VIG PDF p. 63, rebuttal to argument against",
+            reviewer_note=(
+                "Attributed rebuttal by proponents. Do not treat as neutral fact; compare full "
+                "wording and author list before approval."
+            ),
+        ),
+    ]
+
+    for page_number in PAGE_RANGES["full-text"]:
+        text = extracted_pages[page_number]
+        if page_number == 126:
+            text = slice_from(text, "PROPOSITION 36")
+        chunks.append(
+            make_candidate(
+                chunk_id=f"ca-prop-36-2024-text-p{page_number:03d}",
                 text=text,
-                locator=f"Official VIG PDF p. {page_number}",
-                extraction_method="digital PDF text extraction from master snapshot",
-                extraction_status=ExtractionStatus.NEEDS_REVIEWER_COMPARISON,
+                locator=f"Official VIG PDF p. {page_number}, text of proposed laws",
                 reviewer_note=(
-                    f"Page-level candidate from the {section} page range. "
-                    "Reviewer must compare against the official PDF, trim or reject unrelated "
-                    "text, and preserve attribution before approval."
+                    "Official measure-text page candidate. Reviewer should compare against the "
+                    "PDF page and decide whether to keep page-level chunks or split by statute "
+                    "section before approval."
                 ),
             )
-            chunks.append(candidate.model_dump(mode="json"))
+        )
     return chunks
 
 
@@ -233,7 +371,9 @@ def prepare() -> dict:
         "current_target": "Archived California November 2024 Proposition 36 demo corpus",
         "master_pdf_manifest": str(MANIFEST_PATH.relative_to(ROOT)),
         "review_packet": str(OUTPUT_PATH.relative_to(ROOT)),
+        "reviewer_checklist": "docs/prop36-reviewer-checklist.md",
         "source_record": str(SOURCE_RECORD_PATH.relative_to(ROOT)),
+        "chunk_candidate_count": len(chunks),
         "status": "pending_reviewer_approval",
         "acceptance_gate": [
             "Master PDF snapshot exists and matches SHA-256 manifest.",

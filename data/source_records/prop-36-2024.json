@@ -17,9 +17,9 @@
       "published_at": null,
       "content_sha256": "4f7fef63bddb5c60aaabda673b57ae4375105ce941d2ff9dc9d7136aee7e4ef4",
       "snapshot_uri": "gs://ballotsense-mvp-source-snapshots/ca-general-2024-11-05/ca-prop-36-2024/ca-2024-vig-complete/4f7fef63bddb5c60aaabda673b57ae4375105ce941d2ff9dc9d7136aee7e4ef4.pdf",
-      "corpus_release_id": null,
-      "review_status": "pending",
-      "reviewed_at": null,
+      "corpus_release_id": "prop-36-review-2026-07-18",
+      "review_status": "approved",
+      "reviewed_at": "2026-07-18T22:44:17Z",
       "reviewer": "Project owner (user)"
     }
   ]

@@ -21,9 +21,9 @@
       "attribution_note": "Tier 1 state voter guide. Ballot arguments inside the guide must still be attributed to their named proponents/opponents.",
       "retrieved_at": "2026-07-18T22:19:11.284191Z",
       "published_at": null,
-      "status": "pending_review",
+      "status": "approved",
       "reviewer": "Project owner (user)",
-      "review_note": "Pending reviewer comparison against the master PDF snapshot."
+      "review_note": "Approved by project owner on 2026-07-18T22:44:17Z after review packet approval."
     }
   ],
   "known_gap": "This packet uses the complete official guide as one master source. Chunk-level review must separate neutral analysis from attributed arguments."

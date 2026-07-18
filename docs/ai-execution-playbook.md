@@ -257,12 +257,21 @@ complete, even if related setup work has begun.
 - [x] **Prop 36 Phase 1** Snapshot and hash the official master PDF; commit the
       manifest and source metadata, not the large PDF bytes.
 - [x] **Prop 36 Phase 2** Extract Prop 36 page-level chunk candidates into a
-      pending reviewer packet. Do not promote, ingest, or embed until reviewer
-      approval is explicit.
+      pending reviewer packet. Promotion, ingestion, and embedding remained
+      blocked until reviewer approval.
+- [x] **Prop 36 Phase 2 refinement** Split the broad Prop 36 page-level
+      extraction into 17 reviewer-friendly candidates: title/summary, LAO
+      background, LAO proposal, LAO fiscal effects, four attributed argument /
+      rebuttal chunks, and nine official measure-text chunks. Added a reviewer
+      checklist.
+- [x] **Prop 36 Phase 2 approval** Project owner approved the 17-candidate Prop
+      36 review packet on 2026-07-18. Promoted it to
+      `data/corpus/prop-36-2024-approved-chunks.json`; embeddings remain
+      intentionally absent until the ingestion/embedding step.
 - [x] **Prop 36 Phase 3, scanner UI shell** Added a browser-memory-only ballot
       scanner prototype for unmarked ballot/sample-ballot images. It does not
       upload images, run OCR, store photos, infer vote choices, or unlock cited
-      Prop 36 research before review approval.
+      Prop 36 research before ingestion and embeddings are complete.
 
 ## Phase 0 — Product decisions and governance
 
@@ -544,10 +553,11 @@ master authenticity anchor.
    `ca-prop-36-2024`.
 5. [x] Extract page-level verbatim chunk candidates for the Prop 36 title,
    summary, Legislative Analyst analysis, arguments/rebuttals, and full text.
-6. [x] Keep the review packet at `review_decision: pending`.
-7. [x] Refuse promotion to `data/corpus` until the reviewer explicitly approves
-   the packet.
+6. [x] Keep the review packet pending until the reviewer explicitly approves it.
+7. [x] Record reviewer approval and promote the approved chunks to `data/corpus`.
 8. [x] Refuse embeddings until the approved corpus file exists.
+9. [ ] Ingest the approved Prop 36 corpus into development Firestore.
+10. [ ] Generate embeddings for the approved Prop 36 chunks.
 
 ## Phase 3 — Firestore and retrieval
 
